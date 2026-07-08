@@ -22,9 +22,13 @@ const membersRouter = require('./routes/members');
 const adminMembersRouter = require('./routes/admin-members');
 const contributionsRouter = require('./routes/contributions');
 const eventsRouter = require('./routes/events');
+const authRouter = require('./routes/auth');
 
 app.use('/api/members', membersRouter);
 app.use('/api/admin/members', adminMembersRouter);
+app.use('/api/admin/auth', authRouter);
+app.use('/api/admin/events', eventsRouter);
+app.use('/api/admin/contributions', contributionsRouter);
 app.use('/api/contributions', contributionsRouter);
 app.use('/api/rank', contributionsRouter);
 app.use('/api/events', eventsRouter);

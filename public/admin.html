@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>管理后台 - 燕云百业</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    .admin-container { max-width: 1000px; margin: 0 auto; padding: 100px 20px 40px; }
+
+    .login-box {
+      max-width: 400px; margin: 100px auto;
+      background: var(--panel); border: 1px solid rgba(201,169,110,0.16);
+      border-radius: 18px; padding: 40px; text-align: center;
+    }
+    .login-box h2 { margin-bottom: 24px; letter-spacing: 4px; }
+    .login-box input {
+      width: 100%; padding: 12px 16px; background: var(--bg);
+      border: 1px solid rgba(201,169,110,0.2); border-radius: 8px;
+      color: var(--text); font-size: 16px; margin-bottom: 16px;
+    }
+    .login-box .btn { width: 100%; }
+
+    .admin-tabs {
+      display: flex; gap: 12px; margin-bottom: 24px;
+      border-bottom: 1px solid rgba(201,169,110,0.1);
+      padding-bottom: 12px;
+    }
+    .admin-tab {
+      background: transparent; border: none;
+      color: var(--muted); font-size: 14px; letter-spacing: 2px;
+      padding: 8px 16px; cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: all 0.3s;
+    }
+    .admin-tab:hover, .admin-tab.active {
+      color: var(--gold);
+      border-bottom-color: var(--gold);
+    }
+
+    .admin-panel { display: none; }
+    .admin-panel.active { display: block; }
+
+    .admin-table {
+      width: 100%; border-collapse: collapse;
+      background: var(--panel); border-radius: 12px;
+      overflow: hidden;
+    }
+    .admin-table th {
+      background: rgba(201,169,110,0.1);
+      padding: 12px 16px; text-align: left;
+      font-size: 12px; color: var(--gold); letter-spacing: 2px;
+    }
+    .admin-table td {
+      padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.05);
+      font-size: 13px;
+    }
+    .admin-table tr:hover td { background: rgba(201,169,110,0.03); }
+
+    .admin-form {
+      background: var(--panel); border-radius: 12px;
+      padding: 24px; margin-bottom: 24px;
+    }
+    .form-row {
+      display: flex; gap: 12px; margin-bottom: 12px; flex-wrap: wrap;
+    }
+    .form-group { flex: 1; min-width: 200px; }
+    .form-group label {
+      display: block; font-size: 12px; color: var(--muted);
+      letter-spacing: 1px; margin-bottom: 6px;
+    }
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%; padding: 10px 12px; background: var(--bg);
+      border: 1px solid rgba(201,169,110,0.2); border-radius: 6px;
+      color: var(--text); font-size: 14px;
+    }
+    .form-group textarea { min-height: 80px; resize: vertical; }
+
+    .action-btns { display: flex; gap: 8px; }
+    .action-btns button {
+      background: transparent; border: none;
+      color: var(--muted); cursor: pointer; font-size: 16px;
+      padding: 4px 8px; border-radius: 4px;
+      transition: all 0.2s;
+    }
+    .action-btns button:hover { color: var(--gold); background: rgba(201,169,110,0.1); }
+    .action-btns .delete-btn:hover { color: #ff5252; background: rgba(255,82,82,0.1); }
+
+    .section-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 16px;
+    }
+    .section-header h3 {
+      font-size: 18px; letter-spacing: 2px;
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <a href="/" class="nav-logo">燕云百业</a>
+    <div class="nav-links">
+      <a href="/">返回首页</a>
+    </div>
+  </nav>
+
+  <div class="login-box" id="loginBox">
+    <h2>管理后台</h2>
+    <input type="password" id="passwordInput" placeholder="请输入管理密码" onkeypress="if(event.key==='Enter')login()">
+    <button class="btn btn-primary" onclick="login()">登录</button>
+  </div>
+
+  <div class="admin-container" id="adminPanel" style="display:none">
+    <div class="admin-tabs">
+      <button class="admin-tab active" data-tab="members">成员管理</button>
+      <button class="admin-tab" data-tab="events">活动管理</button>
+      <button class="admin-tab" data-tab="contributions">贡献管理</button>
+    </div>
+
+    <div class="admin-panel active" id="panel-members">
+      <div class="section-header">
+        <h3>成员列表</h3>
+        <button class="btn btn-primary" onclick="showMemberForm()">+ 添加成员</button>
+      </div>
+      <div id="memberForm" style="display:none"></div>
+      <table class="admin-table">
+        <thead><tr><th>ID</th><th>昵称</th><th>职位</th><th>标签</th><th>操作</th></tr></thead>
+        <tbody id="memberTableBody"></tbody>
+      </table>
+    </div>
+
+    <div class="admin-panel" id="panel-events">
+      <div class="section-header">
+        <h3>活动列表</h3>
+        <button class="btn btn-primary" onclick="showEventForm()">+ 添加活动</button>
+      </div>
+      <div id="eventForm" style="display:none"></div>
+      <table class="admin-table">
+        <thead><tr><th>日期</th><th>标题</th><th>类型</th><th>状态</th><th>操作</th></tr></thead>
+        <tbody id="eventTableBody"></tbody>
+      </table>
+    </div>
+
+    <div class="admin-panel" id="panel-contributions">
+      <div class="section-header">
+        <h3>贡献记录</h3>
+        <button class="btn btn-primary" onclick="showContributionForm()">+ 添加记录</button>
+      </div>
+      <div id="contributionForm" style="display:none"></div>
+      <table class="admin-table">
+        <thead><tr><th>成员</th><th>分值</th><th>类型</th><th>原因</th><th>时间</th><th>操作</th></tr></thead>
+        <tbody id="contributionTableBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <script src="/js/admin.js"></script>
+</body>
+</html>
