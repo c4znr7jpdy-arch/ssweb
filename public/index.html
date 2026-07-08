@@ -38,14 +38,14 @@
     }
 
     .hero-title {
-      position: fixed; left: 50%; top: 48%; z-index: 40;
-      transform: translate(-50%, -50%);
-      width: min(760px, 88vw); text-align: center;
+      position: fixed; left: 5vw; top: 50%; z-index: 40;
+      transform: translateY(-50%);
+      width: min(400px, 35vw); text-align: left;
       pointer-events: none;
       transition: opacity .45s ease, transform .45s ease;
     }
     .gallery:hover + .hero-title, .hero-title.is-hidden {
-      opacity: .18; transform: translate(-50%, -54%) scale(.96);
+      opacity: .18; transform: translateY(-54%) scale(.96);
     }
     .hero-kicker {
       color: var(--gold); font-size: 12px;

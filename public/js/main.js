@@ -20,9 +20,9 @@
     { href: '/tools/yysls/', tag: 'TOOLS', title: '装备工具', desc: '装备毕业率管理、OCR识别、方案对比，助你快速毕业。', action: '使用工具', mini: '装备工具', external: true }
   ];
 
-  function createPanel(p, i) {
+  function createPanel(p, i, img) {
     return `
-      <section class="panel${i === 0 ? ' active' : ''}" data-href="${p.href}"${p.external ? ' data-external="true"' : ''}>
+      <section class="panel${i === 0 ? ' active' : ''}" style="--img: url('${img}')" data-href="${p.href}"${p.external ? ' data-external="true"' : ''}>
         <span class="panel-border"></span>
         <div class="panel-mini">${p.mini}</div>
         <div class="panel-content">
@@ -41,12 +41,13 @@
     const members = await res.json();
 
     if (members.length === 0) {
-      pages.forEach((p, i) => { gallery.innerHTML += createPanel(p, i); });
+      pages.forEach((p, i) => { gallery.innerHTML += createPanel(p, i, fallbackImages[i % fallbackImages.length]); });
     } else {
-      pages.forEach((p, i) => { gallery.innerHTML += createPanel(p, i); });
+      pages.forEach((p, i) => { gallery.innerHTML += createPanel(p, i, fallbackImages[i % fallbackImages.length]); });
       members.slice(0, 3).forEach((m, i) => {
+        const img = m.cover || m.avatar || fallbackImages[(pages.length + i) % fallbackImages.length];
         gallery.innerHTML += `
-          <section class="panel" data-href="/member.html?id=${m.id}">
+          <section class="panel" style="--img: url('${img}')" data-href="/member.html?id=${m.id}">
             <span class="panel-border"></span>
             <div class="panel-mini">${m.nickname}</div>
             <div class="panel-content">
@@ -62,7 +63,7 @@
     }
   } catch (e) {
     console.error('加载失败:', e);
-    pages.forEach((p, i) => { gallery.innerHTML += createPanel(p, i); });
+    pages.forEach((p, i) => { gallery.innerHTML += createPanel(p, i, fallbackImages[i % fallbackImages.length]); });
   }
 
   // Interaction
