@@ -24,7 +24,7 @@
     panel.innerHTML = lines.map((l, i) => `
       <div class="typewriter-line" style="transition-delay: ${0.3 + i * 0.4}s">
         <div class="tw-label">${l.label}</div>
-        <div class="tw-value ${l.className || ''}">${l.value}<span class="cursor"></span></div>
+        <div class="tw-value ${l.className || ''}">${l.value}</div>
       </div>
     `).join('');
 
