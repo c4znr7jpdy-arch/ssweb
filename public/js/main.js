@@ -1,6 +1,5 @@
 (async () => {
   const gallery = document.getElementById('gallery');
-  const hero = document.getElementById('heroTitle');
 
   const fallbackImages = [
     '/images/home-banner.jpg',
@@ -10,7 +9,6 @@
     '/images/banner5.jpg'
   ];
 
-  // Preload images
   fallbackImages.forEach(src => { const img = new Image(); img.src = src; });
 
   const pages = [
@@ -21,7 +19,7 @@
     { href: '/tools/yysls/', tag: 'TOOLS', title: '装备工具', desc: '装备毕业率管理、OCR识别、方案对比，助你快速毕业。', action: '使用工具', mini: '装备工具', external: true }
   ];
 
-  function createPanel(p, i, img) {
+  function createPanel(p, i) {
     return `
       <section class="panel${i === 0 ? ' active' : ''}" data-href="${p.href}"${p.external ? ' data-external="true"' : ''}>
         <span class="panel-border"></span>
@@ -42,15 +40,10 @@
     const members = await res.json();
 
     if (members.length === 0) {
-      for (let i = 0; i < pages.length; i++) {
-        gallery.innerHTML += createPanel(pages[i], i, fallbackImages[i % fallbackImages.length]);
-      }
+      pages.forEach((p, i) => { gallery.innerHTML += createPanel(p, i); });
     } else {
-      pages.forEach((p, i) => {
-        gallery.innerHTML += createPanel(p, i, fallbackImages[i % fallbackImages.length]);
-      });
+      pages.forEach((p, i) => { gallery.innerHTML += createPanel(p, i); });
       members.slice(0, 3).forEach((m, i) => {
-        const img = m.cover || m.avatar || fallbackImages[(pages.length + i) % fallbackImages.length];
         gallery.innerHTML += `
           <section class="panel" data-href="/member.html?id=${m.id}">
             <span class="panel-border"></span>
@@ -68,19 +61,16 @@
     }
   } catch (e) {
     console.error('加载失败:', e);
-    pages.forEach((p, i) => {
-      gallery.innerHTML += createPanel(p, i, fallbackImages[i % fallbackImages.length]);
-    });
+    pages.forEach((p, i) => { gallery.innerHTML += createPanel(p, i); });
   }
 
-  // Interaction: click to activate, hover on desktop
+  // Interaction
   const panels = [...gallery.querySelectorAll('.panel')];
 
   function activatePanel(panel) {
     panels.forEach(p => p.classList.remove('active'));
     panel.classList.add('active');
     gallery.classList.add('has-active');
-    hero.classList.add('is-hidden');
   }
 
   panels.forEach(panel => {
@@ -94,16 +84,10 @@
         }
       }
     });
-    panel.addEventListener('mouseenter', () => {
-      if (window.matchMedia('(hover: hover)').matches) {
-        hero.classList.add('is-hidden');
-      }
-    });
   });
 
   gallery.addEventListener('mouseleave', () => {
     if (window.matchMedia('(hover: hover)').matches) {
-      hero.classList.remove('is-hidden');
       gallery.classList.remove('has-active');
       panels.forEach(p => p.classList.remove('active'));
       panels[0].classList.add('active');
