@@ -1,5 +1,6 @@
 (async () => {
   const gallery = document.getElementById('gallery');
+  const hero = document.getElementById('heroTitle');
 
   const fallbackImages = [
     '/images/home-banner.jpg',
@@ -74,6 +75,11 @@
   }
 
   panels.forEach(panel => {
+    panel.addEventListener('mouseenter', () => {
+      if (window.matchMedia('(hover: hover)').matches) {
+        hero.classList.add('is-hidden');
+      }
+    });
     panel.addEventListener('click', () => {
       const href = panel.dataset.href;
       if (href) {
@@ -88,6 +94,7 @@
 
   gallery.addEventListener('mouseleave', () => {
     if (window.matchMedia('(hover: hover)').matches) {
+      hero.classList.remove('is-hidden');
       gallery.classList.remove('has-active');
       panels.forEach(p => p.classList.remove('active'));
       panels[0].classList.add('active');

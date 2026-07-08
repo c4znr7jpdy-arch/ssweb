@@ -37,6 +37,32 @@
       color: var(--gold); text-shadow: 0 0 18px rgba(201,169,110,.35);
     }
 
+    .hero-title {
+      position: fixed; left: 50%; top: 48%; z-index: 40;
+      transform: translate(-50%, -50%);
+      width: min(760px, 88vw); text-align: center;
+      pointer-events: none;
+      transition: opacity .45s ease, transform .45s ease;
+    }
+    .gallery:hover + .hero-title, .hero-title.is-hidden {
+      opacity: .18; transform: translate(-50%, -54%) scale(.96);
+    }
+    .hero-kicker {
+      color: var(--gold); font-size: 12px;
+      letter-spacing: 8px; margin-bottom: 20px;
+      text-shadow: 0 0 20px rgba(201,169,110,.35);
+    }
+    .hero-title h1 {
+      font-family: 'Noto Serif SC', serif;
+      font-size: clamp(38px, 6.4vw, 82px);
+      line-height: 1.08; letter-spacing: 14px; font-weight: 700;
+      text-shadow: 0 8px 34px rgba(0,0,0,.78);
+    }
+    .hero-title p {
+      margin-top: 22px; color: rgba(255,255,255,.62);
+      font-size: 14px; letter-spacing: 5px; line-height: 2;
+    }
+
     .gallery {
       position: relative; z-index: 1;
       width: calc(100vw + 16vw); height: 100vh;
@@ -200,6 +226,12 @@
   </nav>
 
   <main class="gallery" id="gallery"></main>
+
+  <section class="hero-title" id="heroTitle">
+    <div class="hero-kicker">WHERE HEROES GATHER</div>
+    <h1>盛世</h1>
+    <p>以盛世之名，聚同袍之义</p>
+  </section>
 
   <div class="footer-hint">HOVER / TAP TO EXPLORE</div>
 
