@@ -1,0 +1,80 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&family=Noto+Sans+SC:wght@300;400;500&display=swap');
+
+:root {
+  --bg: #050505;
+  --panel: rgba(18, 16, 13, 0.86);
+  --panel-light: rgba(34, 29, 22, 0.92);
+  --gold: #c9a96e;
+  --gold-soft: rgba(201, 169, 110, 0.24);
+  --text: #f2eadc;
+  --muted: #9c927f;
+  --red: #6e1e1e;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Noto Sans SC', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+h1, h2, h3 {
+  font-family: 'Noto Serif SC', serif;
+  color: var(--gold);
+}
+
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 20px 40px;
+  background: linear-gradient(180deg, rgba(5,5,4,0.9) 0%, transparent 100%);
+}
+
+.nav-logo {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 24px; font-weight: 700; color: var(--gold);
+  letter-spacing: 8px; text-shadow: 0 0 30px rgba(201,169,110,0.3);
+  text-decoration: none;
+}
+
+.nav-links { display: flex; gap: 32px; }
+.nav-links a {
+  color: rgba(255,255,255,0.5); text-decoration: none; font-size: 14px;
+  letter-spacing: 3px; transition: color 0.3s;
+}
+.nav-links a:hover, .nav-links a.active { color: var(--gold); }
+
+.card {
+  background: var(--panel);
+  border: 1px solid rgba(201, 169, 110, 0.16);
+  border-radius: 18px;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+  transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+}
+.card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(201, 169, 110, 0.45);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.55);
+}
+
+.btn {
+  padding: 10px 24px; border-radius: 8px; border: none;
+  font-size: 14px; font-weight: 500; cursor: pointer;
+  transition: all 0.3s; letter-spacing: 2px;
+}
+.btn-primary { background: var(--gold); color: var(--bg); }
+.btn-primary:hover { background: #d4b87a; box-shadow: 0 4px 20px rgba(201,169,110,0.3); }
+.btn-ghost {
+  background: transparent; color: var(--gold);
+  border: 1px solid rgba(201,169,110,0.3);
+}
+.btn-ghost:hover { background: rgba(201,169,110,0.1); border-color: var(--gold); }
+
+@media (max-width: 768px) {
+  .nav { padding: 15px 20px; }
+  .nav-links { display: none; }
+}
