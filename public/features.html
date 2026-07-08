@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>游戏功能 - 燕云百业</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    .page-header { text-align: center; padding: 120px 20px 40px; }
+    .page-header h1 { font-size: 36px; letter-spacing: 8px; margin-bottom: 12px; }
+    .page-header .subtitle { color: var(--muted); font-size: 14px; letter-spacing: 4px; }
+
+    .tools-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 24px; padding: 20px 40px 60px;
+      max-width: 1000px; margin: 0 auto;
+    }
+
+    .tool-card {
+      background: var(--panel); border: 1px solid rgba(201,169,110,0.16);
+      border-radius: 18px; padding: 30px; text-align: center;
+      transition: all 0.3s; cursor: pointer; text-decoration: none;
+    }
+    .tool-card:hover {
+      transform: translateY(-4px); border-color: rgba(201,169,110,0.45);
+      box-shadow: 0 24px 70px rgba(0,0,0,0.55);
+    }
+    .tool-card .icon { font-size: 48px; margin-bottom: 16px; }
+    .tool-card h3 { color: var(--gold); font-size: 18px; letter-spacing: 2px; margin-bottom: 8px; }
+    .tool-card p { color: var(--muted); font-size: 13px; line-height: 1.6; }
+
+    .tool-card.disabled {
+      opacity: 0.4; cursor: default;
+    }
+    .tool-card.disabled:hover {
+      transform: none; border-color: rgba(201,169,110,0.16);
+      box-shadow: none;
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <a href="/" class="nav-logo">燕云百业</a>
+    <div class="nav-links">
+      <a href="/">主页</a>
+      <a href="/members.html">成员</a>
+      <a href="/calendar.html">活动日历</a>
+      <a href="/rank.html">贡献榜</a>
+      <a href="/features.html" class="active">装备工具</a>
+    </div>
+  </nav>
+
+  <div class="page-header">
+    <h1>游戏功能</h1>
+    <div class="subtitle">百业专属工具箱</div>
+  </div>
+
+  <div class="tools-grid">
+    <a class="tool-card" href="/tools/yysls/" target="_blank">
+      <div class="icon">⚔️</div>
+      <h3>装备毕业率管理器</h3>
+      <p>管理装备词条、计算毕业率、对比装备收益、培养建议</p>
+    </a>
+    <div class="tool-card disabled">
+      <div class="icon">📖</div>
+      <h3>副本攻略</h3>
+      <p>即将上线...</p>
+    </div>
+    <div class="tool-card disabled">
+      <div class="icon">🗺️</div>
+      <h3>地图工具</h3>
+      <p>即将上线...</p>
+    </div>
+  </div>
+</body>
+</html>
