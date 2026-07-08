@@ -20,9 +20,12 @@ app.use(express.static(path.join(__dirname, '..', 'public')));
 // API routes
 const membersRouter = require('./routes/members');
 const adminMembersRouter = require('./routes/admin-members');
+const contributionsRouter = require('./routes/contributions');
 
 app.use('/api/members', membersRouter);
 app.use('/api/admin/members', adminMembersRouter);
+app.use('/api/contributions', contributionsRouter);
+app.use('/api/rank', contributionsRouter);
 
 // SPA fallback (Express 5 requires named params for catch-all)
 app.get('/{*splat}', (req, res) => {
