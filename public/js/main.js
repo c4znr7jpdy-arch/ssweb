@@ -9,6 +9,12 @@
     '/images/banner5.jpg'
   ];
 
+  // Preload images for smoother display
+  fallbackImages.forEach(src => {
+    const img = new Image();
+    img.src = src;
+  });
+
   try {
     const res = await fetch('/api/members');
     const members = await res.json();

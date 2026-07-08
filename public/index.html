@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>盛世</title>
   <link rel="stylesheet" href="/css/style.css">
+  <link rel="preload" href="/images/home-banner.jpg" as="image">
   <style>
     html { scroll-behavior: smooth; }
     body { background: var(--bg); }
@@ -85,9 +86,8 @@
       transform: skewX(-5deg);
       transform-origin: center;
       margin-left: -1.15vw;
-      transition: flex 650ms cubic-bezier(.2,.9,.2,1), filter 650ms cubic-bezier(.2,.9,.2,1);
-      filter: brightness(.82) saturate(.9);
-      will-change: flex, filter;
+      transition: flex 500ms cubic-bezier(.4,0,.2,1);
+      will-change: flex;
       cursor: pointer;
     }
 
@@ -100,8 +100,8 @@
       background-size: cover; background-position: center;
       transform: skewX(5deg) scale(1.08);
       transform-origin: center;
-      transition: transform 650ms cubic-bezier(.2,.9,.2,1);
-      will-change: transform;
+      transition: transform 500ms cubic-bezier(.4,0,.2,1), opacity 500ms cubic-bezier(.4,0,.2,1);
+      will-change: transform, opacity;
     }
 
     .panel::after {
@@ -110,15 +110,16 @@
       background:
         linear-gradient(90deg, rgba(0,0,0,.35), transparent 22%, transparent 78%, rgba(0,0,0,.25)),
         linear-gradient(180deg, rgba(0,0,0,.12), transparent 30%, rgba(0,0,0,.22));
-      opacity: .85;
-      transition: opacity 650ms cubic-bezier(.2,.9,.2,1);
+      opacity: .75;
+      transition: opacity 500ms cubic-bezier(.4,0,.2,1);
       pointer-events: none;
     }
 
-    .gallery:hover .panel { flex: .82; filter: brightness(.45) saturate(.5); }
-    .gallery .panel:hover { flex: 2.35; filter: brightness(1.05) saturate(1.1); z-index: 5; }
-    .gallery .panel:hover::before { transform: skewX(5deg) scale(1.18); }
-    .gallery .panel:hover::after { opacity: .28; }
+    .gallery:hover .panel { flex: .85; }
+    .gallery:hover .panel::before { opacity: .45; }
+    .gallery .panel:hover { flex: 2.3; z-index: 5; }
+    .gallery .panel:hover::before { transform: skewX(5deg) scale(1.15); opacity: 1; }
+    .gallery .panel:hover::after { opacity: .15; }
 
     .panel-content {
       position: absolute; inset: 0; z-index: 10;
