@@ -5,6 +5,119 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>燕云百业</title>
   <link rel="stylesheet" href="/css/style.css">
+  <style>
+    html, body { overflow: hidden; height: 100%; }
+
+    .gallery {
+      width: calc(100vw + 12vw);
+      height: 100vh;
+      margin-left: -6vw;
+      display: flex;
+      overflow: hidden;
+      background: var(--bg);
+    }
+
+    .panel {
+      position: relative;
+      height: 100vh;
+      flex: 1;
+      min-width: 0;
+      overflow: hidden;
+      transform: skewX(-5deg);
+      transform-origin: center;
+      margin-left: -1.15vw;
+      transition: flex 650ms cubic-bezier(.2,.9,.2,1), filter 650ms cubic-bezier(.2,.9,.2,1);
+      filter: brightness(.82) saturate(.9);
+      will-change: flex, filter;
+      cursor: pointer;
+    }
+
+    .panel:first-child { margin-left: 0; }
+
+    .panel::before {
+      content: "";
+      position: absolute; inset: 0 -4vw;
+      background-image: var(--img);
+      background-size: cover; background-position: center;
+      transform: skewX(5deg) scale(1.08);
+      transform-origin: center;
+      transition: transform 650ms cubic-bezier(.2,.9,.2,1);
+      will-change: transform;
+    }
+
+    .panel::after {
+      content: "";
+      position: absolute; inset: 0;
+      background:
+        linear-gradient(90deg, rgba(0,0,0,.35), transparent 22%, transparent 78%, rgba(0,0,0,.25)),
+        linear-gradient(180deg, rgba(0,0,0,.12), transparent 30%, rgba(0,0,0,.22));
+      opacity: .85;
+      transition: opacity 650ms cubic-bezier(.2,.9,.2,1);
+      pointer-events: none;
+    }
+
+    .gallery:hover .panel { flex: .82; filter: brightness(.45) saturate(.5); }
+    .gallery .panel:hover { flex: 2.35; filter: brightness(1.05) saturate(1.1); z-index: 5; }
+    .gallery .panel:hover::before { transform: skewX(5deg) scale(1.18); }
+    .gallery .panel:hover::after { opacity: .28; }
+
+    .panel-content {
+      position: absolute; inset: 0; z-index: 10;
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: 40px 50px;
+      pointer-events: none;
+    }
+
+    .panel-tag {
+      font-size: 11px; letter-spacing: 4px; color: var(--gold);
+      text-transform: uppercase; margin-bottom: 12px;
+      opacity: 0; transform: translateY(10px);
+      transition: all 400ms ease 100ms;
+    }
+    .panel:hover .panel-tag { opacity: 1; transform: translateY(0); }
+
+    .panel-title {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 32px; font-weight: 700; color: #fff;
+      letter-spacing: 6px; line-height: 1.4;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.5);
+      opacity: 0; transform: translateY(20px);
+      transition: all 450ms ease 150ms;
+    }
+    .panel:hover .panel-title { opacity: 1; transform: translateY(0); }
+
+    .panel-desc {
+      font-size: 13px; color: rgba(255,255,255,0.6);
+      letter-spacing: 2px; margin-top: 12px; line-height: 1.8;
+      max-width: 320px;
+      opacity: 0; transform: translateY(15px);
+      transition: all 450ms ease 200ms;
+    }
+    .panel:hover .panel-desc { opacity: 1; transform: translateY(0); }
+
+    .panel-line {
+      width: 40px; height: 1px; background: var(--gold); margin: 16px 0;
+      opacity: 0; transform: scaleX(0); transform-origin: left;
+      transition: all 400ms ease 250ms;
+    }
+    .panel:hover .panel-line { opacity: 1; transform: scaleX(1); }
+
+    .footer-hint {
+      position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+      color: rgba(255,255,255,0.25); font-size: 12px; letter-spacing: 4px;
+      z-index: 100;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse { 0%,100% { opacity: .25; } 50% { opacity: .5; } }
+
+    @media (max-width: 768px) {
+      .gallery { width: calc(100vw + 18vw); margin-left: -9vw; }
+      .panel { margin-left: -2.4vw; }
+      .gallery:hover .panel { flex: .92; }
+      .gallery .panel:hover { flex: 1.9; }
+      .panel-title { font-size: 22px; }
+    }
+  </style>
 </head>
 <body>
   <nav class="nav">
@@ -17,6 +130,11 @@
       <a href="/tools/yysls/" target="_blank">装备工具</a>
     </div>
   </nav>
+
+  <main class="gallery" id="gallery"></main>
+
+  <div class="footer-hint">HOVER TO EXPLORE</div>
+
   <script src="/js/main.js"></script>
 </body>
 </html>
