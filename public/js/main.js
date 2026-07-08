@@ -3,10 +3,10 @@
 
   const fallbackImages = [
     '/images/home-banner.jpg',
-    'https://images.unsplash.com/photo-1518709268805-4e9042af2176?auto=format&fit=crop&w=1200&q=90',
-    'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=90',
-    'https://images.unsplash.com/photo-1528181304800-259b08848526?auto=format&fit=crop&w=1200&q=90',
-    'https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1200&q=90'
+    '/images/banner2.jpg',
+    '/images/banner3.jpg',
+    '/images/banner4.jpg',
+    '/images/banner5.jpg'
   ];
 
   try {
