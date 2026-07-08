@@ -14,7 +14,7 @@
     const members = await res.json();
 
     if (members.length === 0) {
-      const titles = ['燕云百业', '成员风采', '活动日历', '贡献榜', '游戏攻略'];
+      const titles = ['盛世', '成员风采', '活动日历', '贡献榜', '游戏攻略'];
       const descs = [
         '同袍共赴山河远，一剑曾挡百万师',
         '江湖路远，幸得同行',
