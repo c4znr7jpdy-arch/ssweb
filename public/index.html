@@ -65,8 +65,8 @@
 
     .gallery {
       position: relative; z-index: 1;
-      width: calc(100vw + 16vw); height: 100vh;
-      margin-left: -8vw; display: flex; overflow: hidden;
+      width: 70vw; height: 100vh;
+      margin-left: 30vw; display: flex; overflow: hidden;
       background: radial-gradient(circle at 50% 45%, rgba(201,169,110,.09), transparent 35%), var(--bg);
     }
 
@@ -196,7 +196,8 @@
       .nav-logo { font-size: 18px; letter-spacing: 5px; }
       .nav-logo::before { width: 20px; }
       .nav-links { display: none; }
-      .gallery { width: calc(100vw + 24vw); margin-left: -12vw; }
+      .hero-title { left: 5vw; width: 90vw; }
+      .gallery { width: 100vw; margin-left: 0; }
       .panel { margin-left: -3.2vw; }
       .gallery:hover .panel { flex: 1; filter: brightness(.74) saturate(.78) contrast(1.04); }
       .gallery.has-active .panel { flex: .72; filter: brightness(.34) saturate(.42) contrast(1); }
