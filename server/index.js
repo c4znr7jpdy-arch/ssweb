@@ -17,11 +17,12 @@ app.use(session({
 // Static files
 app.use(express.static(path.join(__dirname, '..', 'public')));
 
-// API routes (to be added in later tasks)
-// app.use('/api/members', require('./routes/members'));
-// app.use('/api/events', require('./routes/events'));
-// app.use('/api/contributions', require('./routes/contributions'));
-// app.use('/api/admin', require('./routes/auth'));
+// API routes
+const membersRouter = require('./routes/members');
+const adminMembersRouter = require('./routes/admin-members');
+
+app.use('/api/members', membersRouter);
+app.use('/api/admin/members', adminMembersRouter);
 
 // SPA fallback (Express 5 requires named params for catch-all)
 app.get('/{*splat}', (req, res) => {
