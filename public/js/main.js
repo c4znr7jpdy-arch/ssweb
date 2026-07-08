@@ -22,7 +22,7 @@
 
   function createPanel(p, i, img) {
     return `
-      <section class="panel${i === 0 ? ' active' : ''}" style="--img: url('${img}')" data-href="${p.href}"${p.external ? ' data-external="true"' : ''}>
+      <section class="panel" style="--img: url('${img}')" data-href="${p.href}"${p.external ? ' data-external="true"' : ''}>
         <span class="panel-border"></span>
         <div class="panel-mini">${p.mini}</div>
         <div class="panel-content">
@@ -98,7 +98,6 @@
       hero.classList.remove('is-hidden');
       gallery.classList.remove('has-active');
       panels.forEach(p => p.classList.remove('active'));
-      panels[0].classList.add('active');
     }
   });
 })();
