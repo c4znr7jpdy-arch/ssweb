@@ -2,11 +2,11 @@
   const gallery = document.getElementById('gallery');
 
   const fallbackImages = [
+    '/images/home-banner.jpg',
     'https://images.unsplash.com/photo-1518709268805-4e9042af2176?auto=format&fit=crop&w=1200&q=90',
     'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=90',
     'https://images.unsplash.com/photo-1528181304800-259b08848526?auto=format&fit=crop&w=1200&q=90',
-    'https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1200&q=90',
-    'https://images.unsplash.com/photo-1493246507139-91e8fad9978e?auto=format&fit=crop&w=1200&q=90'
+    'https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1200&q=90'
   ];
 
   try {
@@ -22,7 +22,7 @@
         '论功行赏，英雄留名',
         '独门秘籍，倾囊相授'
       ];
-      const tags = ['OUR GUILD', 'MEMBERS', 'CALENDAR', 'RANKINGS', 'FEATURES'];
+      const tags = ['HOME', 'MEMBERS', 'CALENDAR', 'RANKINGS', 'FEATURES'];
 
       for (let i = 0; i < 5; i++) {
         gallery.innerHTML += `
