@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>盛世｜燕云百业</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <div class="noise"></div>
+
+  <header class="topbar">
+    <a href="/" class="brand">盛世</a>
+    <nav class="nav">
+      <a class="active" href="/">主页</a>
+      <a href="/members.html">成员</a>
+      <a href="/album.html">成员相册</a>
+      <a href="/me.html">个人中心</a>
+      <span id="userBox"></span>
+    </nav>
+  </header>
+
+  <main class="page">
+    <section class="hero">
+      <div>
+        <div class="kicker">WHERE HEROES GATHER</div>
+        <h1>盛世</h1>
+        <p class="sub">成员详情页只展示成员资料；成员相册只看该成员图片；上传入口统一放到个人中心。</p>
+        <div style="margin-top:28px;display:flex;gap:14px;">
+          <a class="btn btn-primary" href="/register.html">注册成员</a>
+          <a class="btn" href="/members.html">查看成员</a>
+        </div>
+      </div>
+
+      <div class="panel hero-card">
+        <strong>权限模型已调整</strong>
+        <p>非本人不可从成员相册上传。普通用户只能上传自己的图片，管理员可以代传和删除所有图片。</p>
+      </div>
+    </section>
+  </main>
+
+  <script src="/js/auth.js"></script>
+</body>
+</html>

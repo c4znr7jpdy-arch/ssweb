@@ -1,10 +1,12 @@
 // 金山文档 AirScript：将“工作表1”B3:B12 的游戏名字同步到本周“盛世活动-双10”。
+// 活动封存成功后清空 B3:C12，C 列不参与报名同步。
 // 服务端按中国时间的本周一和活动名定位活动，不存在时自动创建，不保存活动 ID。
 
 const ENDPOINT = 'https://ss.xiuxianjyj.xin/api/kdocs/events/weekly-roster';
 const TOKEN = '请填写服务器配置的 KDOCS_SYNC_TOKEN';
 const SHEET_NAME = '工作表1';
 const NAME_RANGE = 'B3:B12';
+const CLEAR_RANGE = 'B3:C12';
 const EVENT_TITLE = '双10';
 const EVENT_TYPE = '副本';
 const START_TIME = '19:30';
@@ -92,8 +94,8 @@ function archiveWebsiteAndClearSheet() {
     throw new Error(`封存网站活动失败：HTTP ${response.status} ${response.text()}`);
   }
   const archived = response.json();
-  Application.Worksheets.Item(SHEET_NAME).Range(NAME_RANGE).Value2 =
-    Array.from({ length: 10 }, () => ['']);
+  Application.Worksheets.Item(SHEET_NAME).Range(CLEAR_RANGE).Value2 =
+    Array.from({ length: 10 }, () => ['', '']);
   return { direction: 'archive_and_clear', latest, archived };
 }
 

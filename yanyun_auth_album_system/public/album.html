@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>成员相册｜盛世</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <div class="noise"></div>
+
+  <header class="topbar">
+    <a href="/" class="brand">盛世</a>
+    <nav class="nav">
+      <a href="/">主页</a>
+      <a href="/members.html">成员</a>
+      <a class="active" href="/album.html">成员相册</a>
+      <a href="/album-upload.html">上传图片</a>
+      <span id="userBox"></span>
+    </nav>
+  </header>
+
+  <main class="page">
+    <section class="hero">
+      <div>
+        <div class="kicker">MEMBER PHOTO ARCHIVE</div>
+        <h1>成员相册</h1>
+        <p class="sub">成员上传后的图片会在这里展示。点击图片进入沉浸式大图预览。</p>
+      </div>
+
+      <div class="panel hero-card">
+        <strong id="albumCount">0 张</strong>
+        <p>支持上传、压缩、预览大图、键盘切换上一张 / 下一张。</p>
+      </div>
+    </section>
+
+    <section class="toolbar">
+      <div class="filters">
+        <button class="filter active" data-category="全部">全部</button>
+        <button class="filter" data-category="个人">个人</button>
+        <button class="filter" data-category="活动">活动</button>
+        <button class="filter" data-category="合照">合照</button>
+        <button class="filter" data-category="风景">风景</button>
+      </div>
+
+      <a class="btn btn-primary" href="/album-upload.html">上传图片</a>
+    </section>
+
+    <section class="album-grid" id="albumGrid"></section>
+  </main>
+
+  <section class="lightbox" id="lightbox">
+    <button class="close" id="closeLightbox">×</button>
+
+    <div class="lightbox-view">
+      <img class="lightbox-img" id="lightboxImg" alt="大图预览" />
+    </div>
+
+    <aside class="lightbox-side">
+      <div class="kicker" id="lightboxNo">PHOTO</div>
+      <h2 class="lightbox-title" id="lightboxTitle"></h2>
+      <p class="lightbox-meta" id="lightboxMeta"></p>
+    </aside>
+
+    <div class="lightbox-actions">
+      <button id="prevPhoto">‹</button>
+      <button id="nextPhoto">›</button>
+    </div>
+  </section>
+
+  <script src="/js/album.js"></script>
+</body>
+</html>

@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>成员详情｜盛世</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #050504;
+      --gold: #c9a96e;
+      --gold-soft: rgba(201, 169, 110, .35);
+      --white-soft: rgba(255,255,255,.68);
+      --glass: rgba(10, 10, 9, .38);
+      --glass-border: rgba(201,169,110,.22);
+    }
+
+    html, body {
+      width: 100%;
+      min-height: 100%;
+      background: var(--bg);
+      color: #fff;
+      font-family:
+        "Noto Serif SC",
+        "Source Han Serif SC",
+        "Microsoft YaHei",
+        serif;
+      overflow: hidden;
+    }
+
+    body {
+      background: #050504;
+    }
+
+    .page {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      isolation: isolate;
+    }
+
+    /* 背景大图 */
+    .bg {
+      position: absolute;
+      inset: 0;
+      z-index: -4;
+      background-image: var(--member-bg);
+      background-size: cover;
+      background-position: var(--bg-pos, center center);
+      transform: scale(1.04);
+      filter: brightness(.82) saturate(.86) contrast(1.04);
+    }
+
+    /* 左侧压暗，让“返回”和信息层更稳 */
+    .shade {
+      position: absolute;
+      inset: 0;
+      z-index: -3;
+      background:
+        linear-gradient(90deg,
+          rgba(0,0,0,.84) 0%,
+          rgba(0,0,0,.58) 22%,
+          rgba(0,0,0,.16) 52%,
+          rgba(0,0,0,.50) 100%),
+        linear-gradient(180deg,
+          rgba(0,0,0,.46) 0%,
+          transparent 36%,
+          rgba(0,0,0,.68) 100%);
+    }
+
+    /* 视觉装饰：金色细线 */
+    .gold-line {
+      position: absolute;
+      left: 7.2vw;
+      top: 11vh;
+      width: 1px;
+      height: 74vh;
+      background: linear-gradient(180deg, transparent, rgba(201,169,110,.58), transparent);
+      opacity: .65;
+    }
+
+    .back {
+      position: fixed;
+      top: 34px;
+      left: 46px;
+      z-index: 10;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      color: rgba(255,255,255,.62);
+      text-decoration: none;
+      font-size: 13px;
+      letter-spacing: 3px;
+      transition: color .25s ease, transform .25s ease;
+    }
+
+    .back::before {
+      content: "";
+      width: 28px;
+      height: 1px;
+      background: rgba(255,255,255,.52);
+      transition: background .25s ease, width .25s ease;
+    }
+
+    .back:hover {
+      color: var(--gold);
+      transform: translateX(-2px);
+    }
+
+    .back:hover::before {
+      width: 38px;
+      background: var(--gold);
+    }
+
+    .content {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      height: 100%;
+      display: grid;
+      grid-template-columns: 43vw 1fr;
+      align-items: center;
+      padding: 8vh 6vw 7vh;
+      gap: 4vw;
+    }
+
+    /* 左侧身份信息 */
+    .identity {
+      align-self: end;
+      padding-left: 6vw;
+      padding-bottom: 6vh;
+      max-width: 520px;
+    }
+
+    .kicker {
+      color: var(--gold);
+      font-size: 12px;
+      letter-spacing: 8px;
+      margin-bottom: 20px;
+      text-shadow: 0 0 22px var(--gold-soft);
+    }
+
+    .member-no {
+      color: rgba(255,255,255,.78);
+      font-size: 18px;
+      letter-spacing: 5px;
+      margin-bottom: 16px;
+    }
+
+    .name {
+      font-size: clamp(46px, 5.2vw, 76px);
+      line-height: 1.08;
+      letter-spacing: 10px;
+      color: #fff;
+      text-shadow: 0 12px 44px rgba(0,0,0,.75);
+      margin-bottom: 24px;
+      white-space: nowrap;
+    }
+
+    .quote {
+      position: relative;
+      color: rgba(255,255,255,.74);
+      font-size: 16px;
+      letter-spacing: 4px;
+      line-height: 2;
+      padding-left: 22px;
+      margin-bottom: 34px;
+    }
+
+    .quote::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 12px;
+      width: 1px;
+      height: calc(100% - 20px);
+      background: var(--gold);
+      box-shadow: 0 0 18px var(--gold-soft);
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .tag {
+      padding: 8px 14px;
+      border: 1px solid rgba(201,169,110,.34);
+      color: rgba(255,255,255,.74);
+      background: rgba(0,0,0,.24);
+      backdrop-filter: blur(8px);
+      font-size: 12px;
+      letter-spacing: 2px;
+    }
+
+    /* 右侧玻璃卡 */
+    .profile-card {
+      justify-self: end;
+      width: min(460px, 34vw);
+      padding: 34px 34px 30px;
+      border: 1px solid var(--glass-border);
+      background:
+        linear-gradient(135deg, rgba(255,255,255,.08), rgba(255,255,255,.015)),
+        rgba(3,3,3,.34);
+      box-shadow:
+        0 24px 80px rgba(0,0,0,.44),
+        inset 0 0 42px rgba(201,169,110,.035);
+      backdrop-filter: blur(18px);
+      transform-style: preserve-3d;
+      transform: perspective(1200px) rotateY(-10deg) rotateX(2deg);
+      transition: transform .16s ease-out;
+    }
+
+    .card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 26px;
+    }
+
+    .role {
+      color: var(--gold);
+      font-size: 12px;
+      letter-spacing: 5px;
+    }
+
+    .status {
+      color: rgba(255,255,255,.52);
+      font-size: 12px;
+      letter-spacing: 3px;
+    }
+
+    .field-list {
+      display: grid;
+      gap: 18px;
+      margin-bottom: 28px;
+    }
+
+    .field {
+      display: grid;
+      grid-template-columns: 72px 1fr;
+      gap: 18px;
+      align-items: baseline;
+      padding-bottom: 15px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+
+    .field-label {
+      color: rgba(201,169,110,.72);
+      font-size: 12px;
+      letter-spacing: 4px;
+    }
+
+    .field-value {
+      color: rgba(255,255,255,.82);
+      font-size: 15px;
+      letter-spacing: 3px;
+      line-height: 1.8;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 22px;
+    }
+
+    .stat {
+      min-height: 88px;
+      padding: 15px 10px;
+      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(0,0,0,.22);
+      text-align: center;
+    }
+
+    .stat strong {
+      display: block;
+      color: #fff;
+      font-size: 25px;
+      letter-spacing: 2px;
+      margin-bottom: 8px;
+    }
+
+    .stat span {
+      color: rgba(255,255,255,.48);
+      font-size: 12px;
+      letter-spacing: 3px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 14px;
+      margin-top: 28px;
+    }
+
+    .btn {
+      flex: 1;
+      height: 46px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      font-size: 12px;
+      letter-spacing: 4px;
+      transition: transform .25s ease, border-color .25s ease, background .25s ease;
+    }
+
+    .btn-primary {
+      color: #080806;
+      background: var(--gold);
+      border: 1px solid var(--gold);
+    }
+
+    .btn-ghost {
+      color: rgba(255,255,255,.76);
+      background: rgba(0,0,0,.18);
+      border: 1px solid rgba(201,169,110,.38);
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .bottom-nav {
+      position: fixed;
+      right: 46px;
+      bottom: 34px;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .mini-btn {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      color: rgba(255,255,255,.62);
+      text-decoration: none;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.24);
+      backdrop-filter: blur(10px);
+      transition: color .25s ease, border-color .25s ease, transform .25s ease;
+    }
+
+    .mini-btn:hover {
+      color: var(--gold);
+      border-color: rgba(201,169,110,.5);
+      transform: translateY(-2px);
+    }
+
+    @media (max-width: 900px) {
+      html, body {
+        overflow: auto;
+      }
+
+      .page {
+        min-height: 100vh;
+        height: auto;
+        overflow: hidden;
+      }
+
+      .bg {
+        position: fixed;
+        background-position: center top;
+      }
+
+      .content {
+        min-height: 100vh;
+        display: block;
+        padding: 100px 22px 90px;
+      }
+
+      .gold-line {
+        display: none;
+      }
+
+      .identity {
+        padding: 28vh 0 34px;
+      }
+
+      .name {
+        letter-spacing: 6px;
+        font-size: clamp(40px, 15vw, 62px);
+        white-space: nowrap;
+      }
+
+      .quote {
+        font-size: 14px;
+        letter-spacing: 3px;
+      }
+
+      .profile-card {
+        width: 100%;
+        transform: none;
+      }
+
+      .field {
+        grid-template-columns: 64px 1fr;
+      }
+
+      .stats {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .back {
+        left: 22px;
+        top: 24px;
+      }
+
+      .bottom-nav {
+        right: 22px;
+        bottom: 22px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="page" style="--member-bg: url('/images/member-2.jpg'); --bg-pos: center center;">
+    <div class="bg"></div>
+    <div class="shade"></div>
+    <div class="gold-line"></div>
+
+    <a href="/members.html" class="back">返回成员</a>
+
+    <section class="content">
+      <div class="identity">
+        <div class="kicker">BAIYE MEMBER PROFILE</div>
+        <div class="member-no">#002</div>
+        <h1 class="name">有歌旧酒</h1>
+        <p class="quote">剑在手，酒在喉，江湖风雪皆可赴。</p>
+
+        <div class="tags">
+          <span class="tag">副社</span>
+          <span class="tag">输出担当</span>
+          <span class="tag">活动常驻</span>
+        </div>
+      </div>
+
+      <aside class="profile-card">
+        <div class="card-top">
+          <div class="role">DEPUTY MASTER</div>
+          <div class="status">ONLINE / ACTIVE</div>
+        </div>
+
+        <div class="field-list">
+          <div class="field">
+            <div class="field-label">昵称</div>
+            <div class="field-value">有歌旧酒</div>
+          </div>
+
+          <div class="field">
+            <div class="field-label">职位</div>
+            <div class="field-value">副社 · 战斗组</div>
+          </div>
+
+          <div class="field">
+            <div class="field-label">擅长</div>
+            <div class="field-value">PVE副本、活动组织、装备搭配</div>
+          </div>
+
+          <div class="field">
+            <div class="field-label">宣言</div>
+            <div class="field-value">同袍在侧，何惧山河万里。</div>
+          </div>
+        </div>
+
+        <div class="stats">
+          <div class="stat">
+            <strong>92</strong>
+            <span>贡献</span>
+          </div>
+          <div class="stat">
+            <strong>18</strong>
+            <span>活动</span>
+          </div>
+          <div class="stat">
+            <strong>A</strong>
+            <span>评级</span>
+          </div>
+        </div>
+
+        <div class="actions">
+          <a class="btn btn-primary" href="#">成员相册</a>
+        </div>
+      </aside>
+    </section>
+
+    <nav class="bottom-nav">
+      <a class="mini-btn" href="/member.html?id=1">‹</a>
+      <a class="mini-btn" href="/member.html?id=3">›</a>
+    </nav>
+  </main>
+
+  <script>
+    // 简单 3D 跟手效果。不要太夸张，否则会廉价。
+    const card = document.querySelector('.profile-card');
+
+    window.addEventListener('mousemove', (e) => {
+      if (window.innerWidth <= 900) return;
+
+      const x = (e.clientX / window.innerWidth - 0.5) * 2;
+      const y = (e.clientY / window.innerHeight - 0.5) * 2;
+
+      card.style.transform = `perspective(1200px) rotateY(${ -10 + x * 10 }deg) rotateX(${ 2 + y * -8 }deg) translateZ(18px)`;
+    });
+  </script>
+</body>
+</html>

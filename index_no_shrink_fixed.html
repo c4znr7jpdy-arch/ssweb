@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>盛世</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="preload" href="/images/home-banner.jpg" as="image">
+  <style>
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); overflow: hidden; }
+
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 22px 46px;
+      background: linear-gradient(180deg, rgba(5,5,4,.92) 0%, rgba(5,5,4,.46) 55%, transparent 100%);
+      backdrop-filter: blur(4px);
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 14px;
+      color: var(--gold); font-size: 23px; font-weight: 700;
+      letter-spacing: 8px; text-shadow: 0 0 28px rgba(201,169,110,.35);
+      text-decoration: none; white-space: nowrap;
+    }
+    .nav-logo::before {
+      content: ""; width: 30px; height: 1px;
+      background: var(--gold); box-shadow: 0 0 18px var(--gold);
+    }
+    .nav-links { display: flex; align-items: center; gap: 28px; }
+    .nav-links a {
+      color: rgba(255,255,255,.52); text-decoration: none;
+      font-size: 13px; letter-spacing: 3px;
+      transition: color .28s ease, text-shadow .28s ease;
+    }
+    .nav-links a:hover {
+      color: var(--gold); text-shadow: 0 0 18px rgba(201,169,110,.35);
+    }
+
+    .left-mask {
+      /*
+        不再用遮罩压住第一张图。
+        第一张图的斜边由 .panel 自己的 skew 产生，
+        否则遮罩会把第一张图盖窄。
+      */
+      display: none;
+    }
+
+    .hero-title {
+      position: fixed; left: 9vw; top: 50%; z-index: 21;
+      transform: translateY(-50%);
+      width: min(350px, 22vw); text-align: left;
+      pointer-events: none; background: transparent;
+      transition: opacity .45s ease, transform .45s ease;
+    }
+    .gallery:hover + .hero-title, .hero-title.is-hidden {
+      opacity: .18; transform: translateY(-54%) scale(.96);
+    }
+    .hero-kicker {
+      color: var(--gold); font-size: 12px;
+      letter-spacing: 8px; margin-bottom: 20px;
+      text-shadow: 0 0 20px rgba(201,169,110,.35);
+    }
+    .hero-title h1 {
+      font-family: 'Noto Serif SC', serif;
+      font-size: clamp(38px, 6.4vw, 82px);
+      line-height: 1.08; letter-spacing: 14px; font-weight: 700;
+      text-shadow: 0 8px 34px rgba(0,0,0,.78);
+    }
+    .hero-title p {
+      margin-top: 22px; color: rgba(255,255,255,.62);
+      font-size: 14px; letter-spacing: 5px; line-height: 2;
+    }
+
+    .gallery {
+      position: relative; z-index: 1;
+      width: 70vw; height: 100vh;
+      margin-left: 30vw;
+
+      /*
+        修复第一张图左下角竖线，同时不压缩第一张图宽度：
+        允许第一张 skew 面板的斜边伸出 gallery 左边界。
+        body 仍然是 overflow:hidden，所以不会出现页面横向滚动条。
+      */
+      display: flex; overflow: visible;
+
+      background: radial-gradient(circle at 50% 45%, rgba(201,169,110,.09), transparent 35%), var(--bg);
+    }
+
+    .panel {
+      position: relative; height: 100vh; flex: 1; min-width: 0;
+      overflow: hidden; transform: skewX(-5.5deg); transform-origin: center;
+      margin-left: -1.22vw; cursor: pointer;
+      filter: brightness(.74) saturate(.78) contrast(1.04);
+      transition: flex 680ms cubic-bezier(.2,.9,.18,1), filter 680ms cubic-bezier(.2,.9,.18,1);
+      will-change: flex, filter; isolation: isolate;
+    }
+    .panel:first-child { margin-left: 0; }
+
+    .panel::before {
+      content: ""; position: absolute; inset: 0 -5vw;
+      background: linear-gradient(180deg, rgba(0,0,0,.05), rgba(0,0,0,.58)), var(--img);
+      background-size: var(--bg-size, cover);
+      background-position: var(--bg-pos, center);
+      background-repeat: no-repeat;
+      transform: skewX(5.5deg) scale(var(--bg-scale, 1.08)); transform-origin: center;
+      transition:
+        transform 680ms cubic-bezier(.2,.9,.18,1),
+        background-position 680ms cubic-bezier(.2,.9,.18,1),
+        background-size 680ms cubic-bezier(.2,.9,.18,1);
+      will-change: transform; z-index: -2;
+    }
+    .panel::after {
+      content: ""; position: absolute; inset: 0; z-index: -1;
+      background:
+        linear-gradient(90deg, rgba(0,0,0,.68), transparent 22%, transparent 78%, rgba(0,0,0,.45)),
+        linear-gradient(180deg, rgba(0,0,0,.18), transparent 30%, rgba(0,0,0,.34));
+      opacity: .82; transition: opacity 680ms cubic-bezier(.2,.9,.18,1);
+      pointer-events: none;
+    }
+    .panel-border {
+      position: absolute; inset: 0 auto 0 0; width: 1px;
+      background: linear-gradient(180deg, transparent, rgba(201,169,110,.42), transparent);
+      opacity: .72; z-index: 4; pointer-events: none;
+    }
+
+    .gallery:hover .panel {
+      flex: .85; filter: brightness(.5) saturate(.6) contrast(1);
+    }
+    .gallery .panel:hover {
+      flex: 2.8; filter: brightness(1.04) saturate(1.12) contrast(1.06); z-index: 8;
+    }
+    .gallery .panel:hover::before, .gallery .panel.active::before {
+      background-position: var(--hover-pos, var(--bg-pos, center));
+      transform: skewX(5.5deg) scale(var(--hover-scale, 1.14));
+    }
+    .gallery .panel:hover::after, .gallery .panel.active::after { opacity: .24; }
+
+    .panel-mini {
+      position: absolute; left: 50%; bottom: 66px; z-index: 10;
+      transform: translateX(-50%) skewX(5.5deg);
+      writing-mode: vertical-rl; color: rgba(255,255,255,.5);
+      letter-spacing: 6px; font-size: 13px; white-space: nowrap;
+      transition: opacity .36s ease, transform .36s ease;
+      text-shadow: 0 2px 12px rgba(0,0,0,.6);
+    }
+    .panel:hover .panel-mini, .panel.active .panel-mini {
+      opacity: 0; transform: translateX(-50%) translateY(12px) skewX(5.5deg);
+    }
+
+    .panel-content {
+      position: absolute; inset: 0; z-index: 10;
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: 44px 54px 62px; transform: skewX(5.5deg);
+      pointer-events: none;
+    }
+    .panel-index {
+      position: absolute; top: 106px; left: 54px;
+      color: rgba(255,255,255,.18); font-size: 42px;
+      letter-spacing: 3px; font-weight: 700; opacity: .8;
+      transition: color .36s ease, opacity .36s ease;
+    }
+    .panel:hover .panel-index, .panel.active .panel-index {
+      color: rgba(201,169,110,.75); opacity: 1;
+    }
+
+    .panel-tag, .panel-title, .panel-desc, .panel-line, .panel-action {
+      opacity: 0; transform: translateY(18px); transition: all 420ms ease;
+    }
+    .panel-tag {
+      color: var(--gold); font-size: 11px; letter-spacing: 5px;
+      text-transform: uppercase; margin-bottom: 12px; transition-delay: 80ms;
+    }
+    .panel-title {
+      color: #fff; font-size: clamp(25px, 2.8vw, 42px);
+      font-weight: 700; letter-spacing: 7px; line-height: 1.32;
+      text-shadow: 0 3px 22px rgba(0,0,0,.64);
+      transition-delay: 130ms; white-space: nowrap;
+    }
+    .panel-line {
+      width: 46px; height: 1px; background: var(--gold);
+      margin: 18px 0; transform: scaleX(0); transform-origin: left;
+      transition-delay: 190ms;
+    }
+    .panel-desc {
+      max-width: 360px; color: rgba(255,255,255,.66);
+      font-size: 13px; letter-spacing: 2px; line-height: 1.9;
+      transition-delay: 220ms;
+    }
+    .panel-action {
+      width: fit-content; margin-top: 24px; padding: 9px 18px;
+      border: 1px solid rgba(201,169,110,.5);
+      color: rgba(255,255,255,.76); font-size: 12px; letter-spacing: 3px;
+      background: rgba(0,0,0,.22);
+      box-shadow: inset 0 0 22px rgba(201,169,110,.06);
+      transition-delay: 270ms;
+    }
+
+    .panel:hover .panel-tag, .panel:hover .panel-title,
+    .panel:hover .panel-desc, .panel:hover .panel-action,
+    .panel.active .panel-tag, .panel.active .panel-title,
+    .panel.active .panel-desc, .panel.active .panel-action {
+      opacity: 1; transform: translateY(0);
+    }
+    .panel:hover .panel-line, .panel.active .panel-line {
+      opacity: 1; transform: scaleX(1);
+    }
+
+    /*
+      每张图的显示位置可以在这里微调：
+      --bg-pos 横向数值越大，越显示图片右侧；
+      --bg-scale 越小，图片显示越完整。
+    */
+    .panel:nth-child(1) {
+      --bg-pos: center center;
+      --hover-pos: center center;
+      --bg-scale: 1.06;
+      --hover-scale: 1.12;
+    }
+
+    .panel:nth-child(2) {
+      --bg-pos: 50% center;
+      --hover-pos: 50% center;
+      --bg-scale: 1.06;
+      --hover-scale: 1.12;
+    }
+
+    .panel:nth-child(3) {
+      --bg-pos: center center;
+      --hover-pos: center center;
+    }
+
+
+    .footer-hint {
+      position: fixed; bottom: 28px; left: 50%; z-index: 100;
+      transform: translateX(-50%);
+      color: rgba(255,255,255,.28); font-size: 12px; letter-spacing: 5px;
+      animation: pulse 2s ease-in-out infinite; pointer-events: none;
+    }
+    @keyframes pulse { 0%,100% { opacity: .25; } 50% { opacity: .58; } }
+
+    @media (max-width: 768px) {
+      .nav { padding: 16px 20px; }
+      .nav-logo { font-size: 18px; letter-spacing: 5px; }
+      .nav-logo::before { width: 20px; }
+      .nav-links { display: none; }
+      .hero-title { left: 5vw; width: 90vw; }
+      .gallery { width: 100vw; margin-left: 0; }
+      .panel { margin-left: -3.2vw; }
+      .gallery:hover .panel { flex: 1; filter: brightness(.74) saturate(.78) contrast(1.04); }
+      .gallery.has-active .panel { flex: .72; filter: brightness(.34) saturate(.42) contrast(1); }
+      .gallery .panel:hover { flex: 1; filter: brightness(.74) saturate(.78) contrast(1.04); }
+      .gallery .panel.active { flex: 3.2; filter: brightness(1.04) saturate(1.12) contrast(1.06); }
+      .panel-content { padding: 38px 34px 72px; }
+      .panel-index { top: 86px; left: 34px; font-size: 30px; }
+      .panel-title { font-size: 25px; }
+      .panel-desc { font-size: 12px; max-width: 250px; }
+      .footer-hint { bottom: 18px; font-size: 11px; letter-spacing: 3px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { transition: none !important; animation: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="left-mask"></div>
+
+  <nav class="nav">
+    <a href="/" class="nav-logo">盛世</a>
+    <div class="nav-links">
+      <a href="/" class="active" onclick="event.preventDefault();alert('姜玉杰还没做完')">主页</a>
+      <a href="/members.html" onclick="event.preventDefault();alert('姜玉杰还没做完')">成员</a>
+      <a href="/calendar.html" onclick="event.preventDefault();alert('姜玉杰还没做完')">活动日历</a>
+      <a href="/rank.html" onclick="event.preventDefault();alert('姜玉杰还没做完')">贡献榜</a>
+      <a href="/tools/yysls/" onclick="event.preventDefault();alert('姜玉杰还没做完')">装备工具</a>
+    </div>
+  </nav>
+
+  <main class="gallery" id="gallery"></main>
+
+  <section class="hero-title" id="heroTitle">
+    <div class="hero-kicker">WHERE HEROES GATHER</div>
+    <h1>盛世</h1>
+    <p>以盛世之名，聚同袍之义</p>
+  </section>
+
+  <div class="footer-hint">HOVER / TAP TO EXPLORE</div>
+
+  <script src="/js/main.js"></script>
+</body>
+</html>

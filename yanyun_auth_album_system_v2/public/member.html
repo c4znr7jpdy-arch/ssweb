@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>成员详情｜盛世</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <div class="noise"></div>
+
+  <header class="topbar">
+    <a href="/" class="brand">盛世</a>
+    <nav class="nav">
+      <a href="/">主页</a>
+      <a href="/members.html">成员</a>
+      <a href="/album.html">成员相册</a>
+      <a href="/me.html">个人中心</a>
+      <span id="userBox"></span>
+    </nav>
+  </header>
+
+  <main class="page">
+    <section class="hero">
+      <div>
+        <div class="kicker">MEMBER PROFILE</div>
+        <h1>个人详情</h1>
+        <p class="sub">这里是公开展示页。上传入口不在这里，成员本人需要去个人中心上传。</p>
+      </div>
+    </section>
+
+    <section class="detail-layout">
+      <article class="panel detail-main">
+        <div class="detail-no" id="detailNo">MEMBER #000</div>
+        <h2 class="detail-name" id="detailName">成员</h2>
+        <p class="detail-phrase" id="detailPhrase">加载中...</p>
+      </article>
+
+      <aside class="panel detail-card">
+        <div class="form-title">PROFILE INFORMATION</div>
+
+        <div class="detail-card-row">
+          <span>昵称</span>
+          <strong id="cardNickname">--</strong>
+        </div>
+
+        <div class="detail-card-row">
+          <span>身份</span>
+          <strong id="cardRole">--</strong>
+        </div>
+
+        <div class="detail-card-row">
+          <span>账号</span>
+          <strong id="cardAccount">--</strong>
+        </div>
+
+        <div class="detail-card-row">
+          <span>相册数量</span>
+          <strong id="cardPhotos">--</strong>
+        </div>
+
+        <div style="display:flex;gap:12px;margin-top:28px;">
+          <a class="btn btn-primary" id="albumBtn" href="#">成员相册</a>
+          <a class="btn" href="/members.html">返回成员</a>
+        </div>
+      </aside>
+    </section>
+  </main>
+
+  <script src="/js/member.js"></script>
+</body>
+</html>

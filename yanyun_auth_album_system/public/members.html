@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>成员列表｜盛世</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <div class="noise"></div>
+
+  <header class="topbar">
+    <a href="/" class="brand">盛世</a>
+    <nav class="nav">
+      <a href="/">主页</a>
+      <a class="active" href="/members.html">成员</a>
+      <a href="/album.html">成员相册</a>
+      <a href="/album-upload.html">上传图片</a>
+      <span id="userBox"></span>
+    </nav>
+  </header>
+
+  <main class="page">
+    <section class="hero">
+      <div>
+        <div class="kicker">BAIYE MEMBER LIST</div>
+        <h1>成员列表</h1>
+        <p class="sub">注册成功后会自动进入这里。成员可以登录后上传自己的相册图片。</p>
+      </div>
+
+      <div class="panel hero-card">
+        <strong id="memberCount">0 人</strong>
+        <p>当前已注册成员。普通成员只能上传自己的图片；管理员可以上传和管理所有成员图片。</p>
+      </div>
+    </section>
+
+    <section class="members-grid" id="membersGrid"></section>
+  </main>
+
+  <script src="/js/members.js"></script>
+</body>
+</html>

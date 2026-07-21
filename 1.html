@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>燕云十六声百业官网 - 斜向分割首页演示</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --gold: #c9a96e;
+      --gold-soft: rgba(201, 169, 110, .35);
+      --bg: #050504;
+      --white-soft: rgba(255,255,255,.66);
+    }
+
+    html, body {
+      width: 100%;
+      min-height: 100%;
+      background: var(--bg);
+      color: #fff;
+      font-family:
+        "Noto Serif SC",
+        "Source Han Serif SC",
+        "Songti SC",
+        "Microsoft YaHei",
+        serif;
+    }
+
+    body {
+      overflow: hidden;
+    }
+
+    /* 顶部导航 */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 22px 46px;
+      background:
+        linear-gradient(180deg, rgba(5,5,4,.92) 0%, rgba(5,5,4,.46) 55%, transparent 100%);
+      backdrop-filter: blur(4px);
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      color: var(--gold);
+      font-size: 23px;
+      font-weight: 700;
+      letter-spacing: 8px;
+      text-shadow: 0 0 28px var(--gold-soft);
+      white-space: nowrap;
+    }
+
+    .nav-logo::before {
+      content: "";
+      width: 30px;
+      height: 1px;
+      background: var(--gold);
+      box-shadow: 0 0 18px var(--gold);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+
+    .nav-links a {
+      color: rgba(255,255,255,.52);
+      text-decoration: none;
+      font-size: 13px;
+      letter-spacing: 3px;
+      transition: color .28s ease, text-shadow .28s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--gold);
+      text-shadow: 0 0 18px var(--gold-soft);
+    }
+
+    /* 中央主标题 */
+    .hero-title {
+      position: fixed;
+      left: 50%;
+      top: 48%;
+      z-index: 40;
+      transform: translate(-50%, -50%);
+      width: min(760px, 88vw);
+      text-align: center;
+      pointer-events: none;
+      transition: opacity .45s ease, transform .45s ease;
+    }
+
+    .gallery:hover + .hero-title,
+    .hero-title.is-hidden {
+      opacity: .18;
+      transform: translate(-50%, -54%) scale(.96);
+    }
+
+    .hero-kicker {
+      color: var(--gold);
+      font-size: 12px;
+      letter-spacing: 8px;
+      margin-bottom: 20px;
+      text-shadow: 0 0 20px var(--gold-soft);
+    }
+
+    .hero-title h1 {
+      font-size: clamp(38px, 6.4vw, 82px);
+      line-height: 1.08;
+      letter-spacing: 14px;
+      font-weight: 700;
+      text-shadow: 0 8px 34px rgba(0,0,0,.78);
+    }
+
+    .hero-title p {
+      margin-top: 22px;
+      color: rgba(255,255,255,.62);
+      font-size: 14px;
+      letter-spacing: 5px;
+      line-height: 2;
+    }
+
+    /* 斜向分割画廊 */
+    .gallery {
+      position: relative;
+      z-index: 1;
+      width: calc(100vw + 16vw);
+      height: 100vh;
+      margin-left: -8vw;
+      display: flex;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 50% 45%, rgba(201,169,110,.09), transparent 35%),
+        #050504;
+    }
+
+    .panel {
+      position: relative;
+      height: 100vh;
+      flex: 1;
+      min-width: 0;
+      overflow: hidden;
+      transform: skewX(-5.5deg);
+      transform-origin: center;
+      margin-left: -1.22vw;
+      cursor: pointer;
+      filter: brightness(.74) saturate(.78) contrast(1.04);
+      transition:
+        flex 680ms cubic-bezier(.2,.9,.18,1),
+        filter 680ms cubic-bezier(.2,.9,.18,1);
+      will-change: flex, filter;
+      isolation: isolate;
+    }
+
+    .panel:first-child {
+      margin-left: 0;
+    }
+
+    .panel::before {
+      content: "";
+      position: absolute;
+      inset: 0 -5vw;
+      background:
+        linear-gradient(180deg, rgba(0,0,0,.05), rgba(0,0,0,.58)),
+        var(--img);
+      background-size: cover;
+      background-position: center;
+      transform: skewX(5.5deg) scale(1.12);
+      transform-origin: center;
+      transition: transform 680ms cubic-bezier(.2,.9,.18,1);
+      will-change: transform;
+      z-index: -2;
+    }
+
+    .panel::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background:
+        linear-gradient(90deg, rgba(0,0,0,.68), transparent 22%, transparent 78%, rgba(0,0,0,.45)),
+        linear-gradient(180deg, rgba(0,0,0,.18), transparent 30%, rgba(0,0,0,.34));
+      opacity: .82;
+      transition: opacity 680ms cubic-bezier(.2,.9,.18,1);
+      pointer-events: none;
+    }
+
+    .panel-border {
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 1px;
+      background:
+        linear-gradient(180deg, transparent, rgba(201,169,110,.42), transparent);
+      opacity: .72;
+      z-index: 4;
+      pointer-events: none;
+    }
+
+    .gallery:hover .panel,
+    .gallery.has-active .panel {
+      flex: .72;
+      filter: brightness(.34) saturate(.42) contrast(1);
+    }
+
+    .gallery .panel:hover,
+    .gallery .panel.active {
+      flex: 2.8;
+      filter: brightness(1.04) saturate(1.12) contrast(1.06);
+      z-index: 8;
+    }
+
+    .gallery .panel:hover::before,
+    .gallery .panel.active::before {
+      transform: skewX(5.5deg) scale(1.21);
+    }
+
+    .gallery .panel:hover::after,
+    .gallery .panel.active::after {
+      opacity: .24;
+    }
+
+    /* 未悬停时保留一点竖向信息 */
+    .panel-mini {
+      position: absolute;
+      left: 50%;
+      bottom: 66px;
+      z-index: 10;
+      transform: translateX(-50%) skewX(5.5deg);
+      writing-mode: vertical-rl;
+      color: rgba(255,255,255,.5);
+      letter-spacing: 6px;
+      font-size: 13px;
+      white-space: nowrap;
+      transition: opacity .36s ease, transform .36s ease;
+      text-shadow: 0 2px 12px rgba(0,0,0,.6);
+    }
+
+    .panel:hover .panel-mini,
+    .panel.active .panel-mini {
+      opacity: 0;
+      transform: translateX(-50%) translateY(12px) skewX(5.5deg);
+    }
+
+    /* 面板文字 */
+    .panel-content {
+      position: absolute;
+      inset: 0;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 44px 54px 62px;
+      transform: skewX(5.5deg);
+      pointer-events: none;
+    }
+
+    .panel-index {
+      position: absolute;
+      top: 106px;
+      left: 54px;
+      color: rgba(255,255,255,.18);
+      font-size: 42px;
+      letter-spacing: 3px;
+      font-weight: 700;
+      opacity: .8;
+      transition: color .36s ease, opacity .36s ease;
+    }
+
+    .panel:hover .panel-index,
+    .panel.active .panel-index {
+      color: rgba(201,169,110,.75);
+      opacity: 1;
+    }
+
+    .panel-tag,
+    .panel-title,
+    .panel-desc,
+    .panel-line,
+    .panel-action {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: all 420ms ease;
+    }
+
+    .panel-tag {
+      color: var(--gold);
+      font-size: 11px;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      transition-delay: 80ms;
+    }
+
+    .panel-title {
+      color: #fff;
+      font-size: clamp(25px, 2.8vw, 42px);
+      font-weight: 700;
+      letter-spacing: 7px;
+      line-height: 1.32;
+      text-shadow: 0 3px 22px rgba(0,0,0,.64);
+      transition-delay: 130ms;
+      white-space: nowrap;
+    }
+
+    .panel-line {
+      width: 46px;
+      height: 1px;
+      background: var(--gold);
+      margin: 18px 0;
+      transform: scaleX(0);
+      transform-origin: left;
+      transition-delay: 190ms;
+    }
+
+    .panel-desc {
+      max-width: 360px;
+      color: var(--white-soft);
+      font-size: 13px;
+      letter-spacing: 2px;
+      line-height: 1.9;
+      transition-delay: 220ms;
+    }
+
+    .panel-action {
+      width: fit-content;
+      margin-top: 24px;
+      padding: 9px 18px;
+      border: 1px solid rgba(201,169,110,.5);
+      color: rgba(255,255,255,.76);
+      font-size: 12px;
+      letter-spacing: 3px;
+      background: rgba(0,0,0,.22);
+      box-shadow: inset 0 0 22px rgba(201,169,110,.06);
+      transition-delay: 270ms;
+    }
+
+    .panel:hover .panel-tag,
+    .panel:hover .panel-title,
+    .panel:hover .panel-desc,
+    .panel:hover .panel-action,
+    .panel.active .panel-tag,
+    .panel.active .panel-title,
+    .panel.active .panel-desc,
+    .panel.active .panel-action {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .panel:hover .panel-line,
+    .panel.active .panel-line {
+      opacity: 1;
+      transform: scaleX(1);
+    }
+
+    /* 背景图：正式上线时建议替换为你的游戏截图 / 成员截图 */
+    .panel:nth-child(1) { --img: url("https://images.unsplash.com/photo-1518709268805-4e9042af2176?auto=format&fit=crop&w=1400&q=90"); }
+    .panel:nth-child(2) { --img: url("https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1400&q=90"); }
+    .panel:nth-child(3) { --img: url("https://images.unsplash.com/photo-1528181304800-259b08848526?auto=format&fit=crop&w=1400&q=90"); }
+    .panel:nth-child(4) { --img: url("https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1400&q=90"); }
+    .panel:nth-child(5) { --img: url("https://images.unsplash.com/photo-1493246507139-91e8fad9978e?auto=format&fit=crop&w=1400&q=90"); }
+    .panel:nth-child(6) { --img: url("https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1400&q=90"); }
+    .panel:nth-child(7) { --img: url("https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=1400&q=90"); }
+    .panel:nth-child(8) { --img: url("https://images.unsplash.com/photo-1482192596544-9eb780fc7f66?auto=format&fit=crop&w=1400&q=90"); }
+
+    .footer-hint {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      z-index: 100;
+      transform: translateX(-50%);
+      color: rgba(255,255,255,.28);
+      font-size: 12px;
+      letter-spacing: 5px;
+      animation: pulse 2s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    @keyframes pulse {
+      0%,100% { opacity: .25; }
+      50% { opacity: .58; }
+    }
+
+    /* 移动端：点击展开，比 hover 更可靠 */
+    @media (max-width: 768px) {
+      body {
+        overflow: hidden;
+      }
+
+      .nav {
+        padding: 16px 20px;
+      }
+
+      .nav-logo {
+        font-size: 18px;
+        letter-spacing: 5px;
+      }
+
+      .nav-logo::before {
+        width: 20px;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .gallery {
+        width: calc(100vw + 24vw);
+        margin-left: -12vw;
+      }
+
+      .panel {
+        margin-left: -3.2vw;
+      }
+
+      .gallery:hover .panel {
+        flex: 1;
+        filter: brightness(.74) saturate(.78) contrast(1.04);
+      }
+
+      .gallery.has-active .panel {
+        flex: .72;
+        filter: brightness(.34) saturate(.42) contrast(1);
+      }
+
+      .gallery .panel:hover {
+        flex: 1;
+        filter: brightness(.74) saturate(.78) contrast(1.04);
+      }
+
+      .gallery .panel.active {
+        flex: 3.2;
+        filter: brightness(1.04) saturate(1.12) contrast(1.06);
+      }
+
+      .hero-title {
+        top: 45%;
+      }
+
+      .hero-title h1 {
+        letter-spacing: 8px;
+      }
+
+      .hero-title p {
+        font-size: 12px;
+        letter-spacing: 3px;
+      }
+
+      .panel-content {
+        padding: 38px 34px 72px;
+      }
+
+      .panel-index {
+        top: 86px;
+        left: 34px;
+        font-size: 30px;
+      }
+
+      .panel-title {
+        font-size: 25px;
+      }
+
+      .panel-desc {
+        font-size: 12px;
+        max-width: 250px;
+      }
+
+      .footer-hint {
+        bottom: 18px;
+        font-size: 11px;
+        letter-spacing: 3px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        transition: none !important;
+        animation: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-logo">燕云百业</div>
+    <div class="nav-links">
+      <a href="#home">主页</a>
+      <a href="#members">成员</a>
+      <a href="#calendar">活动日历</a>
+      <a href="#rank">贡献榜</a>
+      <a href="#guide">攻略</a>
+      <a href="#join">入社</a>
+    </div>
+  </nav>
+
+  <main class="gallery" aria-label="燕云百业斜向分割主页">
+    <section class="panel active">
+      <span class="panel-border"></span>
+      <div class="panel-mini">百业主页</div>
+      <div class="panel-content">
+        <div class="panel-index">01</div>
+        <div class="panel-tag">OUR GUILD</div>
+        <div class="panel-title">燕云百业</div>
+        <div class="panel-line"></div>
+        <div class="panel-desc">同袍共赴山河远，一剑曾挡百万师。这里是我们的江湖门面。</div>
+        <div class="panel-action">进入主页</div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <span class="panel-border"></span>
+      <div class="panel-mini">成员风采</div>
+      <div class="panel-content">
+        <div class="panel-index">02</div>
+        <div class="panel-tag">MEMBERS</div>
+        <div class="panel-title">成员风采</div>
+        <div class="panel-line"></div>
+        <div class="panel-desc">记录社内核心成员、职位、常用玩法与高光截图。</div>
+        <div class="panel-action">查看成员</div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <span class="panel-border"></span>
+      <div class="panel-mini">活动日历</div>
+      <div class="panel-content">
+        <div class="panel-index">03</div>
+        <div class="panel-tag">CALENDAR</div>
+        <div class="panel-title">活动日历</div>
+        <div class="panel-line"></div>
+        <div class="panel-desc">帮派活动、约战时间、副本安排、集体任务，一屏掌握。</div>
+        <div class="panel-action">查看安排</div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <span class="panel-border"></span>
+      <div class="panel-mini">贡献排行</div>
+      <div class="panel-content">
+        <div class="panel-index">04</div>
+        <div class="panel-tag">RANKINGS</div>
+        <div class="panel-title">贡献榜</div>
+        <div class="panel-line"></div>
+        <div class="panel-desc">论功行赏，英雄留名。展示活跃、贡献、管理协作数据。</div>
+        <div class="panel-action">查看榜单</div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <span class="panel-border"></span>
+      <div class="panel-mini">游戏攻略</div>
+      <div class="panel-content">
+        <div class="panel-index">05</div>
+        <div class="panel-tag">GUIDES</div>
+        <div class="panel-title">游戏攻略</div>
+        <div class="panel-line"></div>
+        <div class="panel-desc">百业内部攻略、职业心得、资源点、玩法说明沉淀在这里。</div>
+        <div class="panel-action">查看攻略</div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <span class="panel-border"></span>
+      <div class="panel-mini">江湖相册</div>
+      <div class="panel-content">
+        <div class="panel-index">06</div>
+        <div class="panel-tag">GALLERY</div>
+        <div class="panel-title">江湖相册</div>
+        <div class="panel-line"></div>
+        <div class="panel-desc">把成员截图、合照、活动纪念做成百业专属影集。</div>
+        <div class="panel-action">浏览相册</div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <span class="panel-border"></span>
+      <div class="panel-mini">百业公告</div>
+      <div class="panel-content">
+        <div class="panel-index">07</div>
+        <div class="panel-tag">NOTICE</div>
+        <div class="panel-title">百业公告</div>
+        <div class="panel-line"></div>
+        <div class="panel-desc">社规、通知、招募要求、更新说明，统一放在公告区。</div>
+        <div class="panel-action">查看公告</div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <span class="panel-border"></span>
+      <div class="panel-mini">入社申请</div>
+      <div class="panel-content">
+        <div class="panel-index">08</div>
+        <div class="panel-tag">JOIN US</div>
+        <div class="panel-title">入社申请</div>
+        <div class="panel-line"></div>
+        <div class="panel-desc">展示招募标准、联系方式、申请表入口，让新人快速找到你。</div>
+        <div class="panel-action">申请加入</div>
+      </div>
+    </section>
+  </main>
+
+  <section class="hero-title">
+    <div class="hero-kicker">WHERE HEROES GATHER</div>
+    <h1>燕云百业</h1>
+    <p>以百业之名，聚同袍之义</p>
+  </section>
+
+  <div class="footer-hint">HOVER / TAP TO EXPLORE</div>
+
+  <script>
+    // 移动端点击展开；桌面端也可点击固定某一栏，方便展示。
+    const gallery = document.querySelector('.gallery');
+    const panels = [...document.querySelectorAll('.panel')];
+    const hero = document.querySelector('.hero-title');
+
+    function activatePanel(panel) {
+      panels.forEach(item => item.classList.remove('active'));
+      panel.classList.add('active');
+      gallery.classList.add('has-active');
+      hero.classList.add('is-hidden');
+    }
+
+    panels.forEach(panel => {
+      panel.addEventListener('click', () => activatePanel(panel));
+      panel.addEventListener('mouseenter', () => {
+        if (window.matchMedia('(hover: hover)').matches) {
+          hero.classList.add('is-hidden');
+        }
+      });
+    });
+
+    gallery.addEventListener('mouseleave', () => {
+      if (window.matchMedia('(hover: hover)').matches) {
+        hero.classList.remove('is-hidden');
+        gallery.classList.remove('has-active');
+        panels.forEach(item => item.classList.remove('active'));
+        panels[0].classList.add('active');
+      }
+    });
+  </script>
+</body>
+</html>
