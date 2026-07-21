@@ -23,6 +23,14 @@ Create `/etc/shengshi.env` from `.env.example`. Set `NODE_ENV=production` and
 use unique, randomly generated values for every secret. Keep the file readable
 only by root and the service group:
 
+```dotenv
+NODE_ENV=production
+PORT=8080
+```
+
+Port `8080` is the production upstream used by `nginx.conf`; local development
+continues to use port `3000`.
+
 ```bash
 sudo chown root:www-data /etc/shengshi.env
 sudo chmod 640 /etc/shengshi.env
