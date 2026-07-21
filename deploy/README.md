@@ -19,9 +19,9 @@ npm ci --omit=dev
 sudo install -d -o www-data -g www-data data public/uploads
 ```
 
-Create `/etc/shengshi.env` from `.env.example`. Set `NODE_ENV=production` and
-use unique, randomly generated values for every secret. Keep the file readable
-only by root and the service group:
+Create the runtime environment file from `.env.example`. Set
+`NODE_ENV=production`, set `PORT=8080`, and use unique, randomly generated
+values for every secret. PM2 reads the project `.env` file:
 
 ```dotenv
 NODE_ENV=production
@@ -32,9 +32,35 @@ Port `8080` is the production upstream used by `nginx.conf`; local development
 continues to use port `3000`.
 
 ```bash
+cp .env.example .env
+chmod 600 .env
+```
+
+The systemd units instead read `/etc/shengshi.env`:
+
+```bash
+sudo cp .env.example /etc/shengshi.env
 sudo chown root:www-data /etc/shengshi.env
 sudo chmod 640 /etc/shengshi.env
 ```
+
+## Run with PM2
+
+Use this option on hosts that already manage Node.js applications with PM2. Do
+not enable the systemd application service at the same time.
+
+```bash
+cd /var/www/shengshi
+sudo mkdir -p /var/backups/shengshi
+pm2 startOrReload ecosystem.config.cjs --only shengshi
+pm2 start ecosystem.config.cjs --only shengshi-backup
+pm2 save
+```
+
+The backup process exits after each run and PM2 starts it again every day at
+03:30 server time. It retains 30 backups in `/var/backups/shengshi`.
+
+## Run with systemd
 
 Install and start the application service:
 
@@ -70,6 +96,7 @@ sudo systemctl start nginx
 ```bash
 curl --fail --silent https://ss.xiuxianjyj.xin/api/health
 curl --head https://ss.xiuxianjyj.xin/
+pm2 logs shengshi --lines 100 --nostream
 sudo journalctl -u guild-website.service -n 100 --no-pager
 ```
 
