@@ -1,10 +1,11 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>百业成员 - 盛世</title>
-  <link rel="stylesheet" href="/css/style.css">
+  <title>成员 - 盛世</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="stylesheet" href="/css/style.css?v=202607106">
   <style>
     .page-header {
       text-align: center;
@@ -26,7 +27,7 @@
       padding: 20px; flex-wrap: wrap;
     }
     .filter-btn {
-      background: transparent; border: 1px solid rgba(201,169,110,0.2);
+      background: transparent; border: 1px solid rgba(0,229,255,0.2);
       color: var(--muted); padding: 8px 20px; border-radius: 30px;
       cursor: pointer; font-size: 13px; letter-spacing: 2px;
       transition: all 0.3s;
@@ -46,7 +47,7 @@
 
     .member-card {
       background: var(--panel);
-      border: 1px solid rgba(201,169,110,0.16);
+      border: 1px solid rgba(0,229,255,0.16);
       border-radius: 18px;
       overflow: hidden;
       cursor: pointer;
@@ -54,7 +55,7 @@
     }
     .member-card:hover {
       transform: translateY(-4px);
-      border-color: rgba(201,169,110,0.45);
+      border-color: rgba(0,229,255,0.45);
       box-shadow: 0 24px 70px rgba(0,0,0,0.55);
     }
 
@@ -68,7 +69,8 @@
       padding: 20px;
     }
     .member-name {
-      font-family: 'Noto Serif SC', serif;
+      font-family: var(--font-display);
+      font-weight: 400;
       font-size: 20px; color: #fff;
       letter-spacing: 4px; margin-bottom: 8px;
     }
@@ -81,7 +83,7 @@
     }
     .member-tag {
       font-size: 11px; color: var(--muted);
-      background: rgba(201,169,110,0.1);
+      background: rgba(0,229,255,0.1);
       padding: 3px 10px; border-radius: 12px;
     }
     .member-signature {
@@ -89,8 +91,10 @@
       font-style: italic;
     }
   </style>
+  <link rel="stylesheet" href="/css/theme.css?v=2026071104">
+  <link rel="stylesheet" href="/css/site-nav.css?v=202607211">
 </head>
-<body>
+<body class="members-page">
   <nav class="nav">
     <a href="/" class="nav-logo">盛世</a>
     <div class="nav-links">
@@ -111,13 +115,14 @@
     <button class="filter-btn active" data-role="">全部</button>
     <button class="filter-btn" data-role="社主">社主</button>
     <button class="filter-btn" data-role="副社">副社</button>
-    <button class="filter-btn" data-role="管理">管理</button>
+    <button class="filter-btn" data-role="长老">长老</button>
     <button class="filter-btn" data-role="核心成员">核心成员</button>
     <button class="filter-btn" data-role="普通成员">普通成员</button>
   </div>
 
   <div class="members-grid" id="membersGrid"></div>
 
-  <script src="/js/members.js"></script>
+  <script src="/js/site-nav.js?v=202607211"></script>
+  <script src="/js/members.js?v=202607142"></script>
 </body>
 </html>

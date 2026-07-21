@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>盛世字体预览</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <style>
+    :root {
+      --bg: #030712;
+      --panel: rgba(8, 18, 34, .76);
+      --line: rgba(0, 229, 255, .18);
+      --cyan: #00e5ff;
+      --violet: #8b5cf6;
+      --text: #eaf8ff;
+      --muted: #8aa4b8;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 18% 12%, rgba(0, 229, 255, .18), transparent 30%),
+        radial-gradient(circle at 82% 4%, rgba(139, 92, 246, .18), transparent 28%),
+        linear-gradient(135deg, #020617 0%, #08111f 48%, #02040a 100%);
+      font-family: "DengXian", "Microsoft YaHei", Arial, sans-serif;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(0, 229, 255, .055) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 229, 255, .055) 1px, transparent 1px);
+      background-size: 44px 44px;
+      mask-image: radial-gradient(circle at center, #000 0%, transparent 78%);
+    }
+
+    main {
+      position: relative;
+      width: min(1180px, calc(100vw - 36px));
+      margin: 0 auto;
+      padding: 54px 0 80px;
+    }
+
+    .hero {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 28px;
+      margin-bottom: 26px;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font: 700 42px/1.1 "Bahnschrift", "DengXian", sans-serif;
+      letter-spacing: 0;
+      color: var(--cyan);
+      text-shadow: 0 0 28px rgba(0, 229, 255, .35);
+    }
+
+    .sub {
+      margin: 0;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .badge {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 10px 14px;
+      color: #c8f7ff;
+      background: rgba(0, 229, 255, .07);
+      box-shadow: 0 0 30px rgba(0, 229, 255, .08);
+      white-space: nowrap;
+      font-family: "Bahnschrift", "DengXian", sans-serif;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .card {
+      min-height: 292px;
+      padding: 26px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background:
+        linear-gradient(145deg, rgba(255, 255, 255, .055), transparent 42%),
+        var(--panel);
+      box-shadow: 0 20px 70px rgba(0, 0, 0, .36), inset 0 1px 0 rgba(255, 255, 255, .08);
+      backdrop-filter: blur(18px);
+    }
+
+    .card h2 {
+      margin: 0 0 8px;
+      font-size: 28px;
+      line-height: 1.12;
+      letter-spacing: 0;
+      color: var(--text);
+    }
+
+    .meta {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 22px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .chip {
+      border: 1px solid rgba(0, 229, 255, .22);
+      border-radius: 999px;
+      padding: 5px 9px;
+      background: rgba(0, 229, 255, .055);
+    }
+
+    .sample-title {
+      margin: 0 0 12px;
+      color: var(--cyan);
+      font-size: 44px;
+      font-weight: 700;
+      line-height: 1;
+      text-shadow: 0 0 26px rgba(0, 229, 255, .25);
+    }
+
+    .sample-body {
+      margin: 0 0 18px;
+      color: #d7e9f2;
+      font-size: 17px;
+      line-height: 1.75;
+    }
+
+    .numbers {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .number {
+      border: 1px solid rgba(139, 92, 246, .25);
+      border-radius: 12px;
+      padding: 13px 14px;
+      background: rgba(139, 92, 246, .08);
+    }
+
+    .number b {
+      display: block;
+      color: var(--cyan);
+      font-size: 25px;
+      line-height: 1;
+    }
+
+    .number span {
+      display: block;
+      margin-top: 7px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .a { font-family: "Bahnschrift", "DengXian", "Microsoft YaHei", sans-serif; }
+    .b { font-family: "DengXian", "Bahnschrift", "Microsoft YaHei", sans-serif; }
+    .c { font-family: "Cascadia Code", "DengXian", monospace; }
+    .d { font-family: "Arial Narrow", "DengXian", "Microsoft YaHei", sans-serif; }
+    .e { font-family: "SimHei", "Bahnschrift", sans-serif; }
+
+    .hint {
+      margin-top: 22px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    @media (max-width: 860px) {
+      .hero { display: block; }
+      .badge { display: inline-block; margin-top: 16px; }
+      .grid { grid-template-columns: 1fr; }
+      .sample-title { font-size: 36px; }
+      .numbers { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="hero">
+      <div>
+        <h1>盛世字体预览</h1>
+        <p class="sub">同一套内容，不同字体气质。先选方向，再把正式字体内置进项目。</p>
+      </div>
+      <div class="badge">Future UI / 3D Glass / Data HUD</div>
+    </section>
+
+    <section class="grid">
+      <article class="card a">
+        <h2>方案 A：稳重科技</h2>
+        <div class="meta"><span class="chip">Bahnschrift</span><span class="chip">DengXian</span><span class="chip">推荐首页/导航</span></div>
+        <p class="sample-title">盛世</p>
+        <p class="sample-body">一入燕云，皆是江湖。成员、相册、日历与贡献数据统一进入未来感控制台。</p>
+        <div class="numbers"><div class="number"><b>05</b><span>核心成员</span></div><div class="number"><b>128</b><span>相册作品</span></div><div class="number"><b>92%</b><span>活跃指数</span></div></div>
+      </article>
+
+      <article class="card b">
+        <h2>方案 B：清爽系统</h2>
+        <div class="meta"><span class="chip">DengXian</span><span class="chip">Microsoft YaHei</span><span class="chip">推荐正文/列表</span></div>
+        <p class="sample-title">成员风采</p>
+        <p class="sample-body">干净、轻、阅读舒服。适合成员列表、个人中心、相册描述这些长期看的页面。</p>
+        <div class="numbers"><div class="number"><b>SS1</b><span>账号</span></div><div class="number"><b>4.8s</b><span>加载</span></div><div class="number"><b>1.0MB</b><span>图片</span></div></div>
+      </article>
+
+      <article class="card c">
+        <h2>方案 C：工程数据感</h2>
+        <div class="meta"><span class="chip">Cascadia Code</span><span class="chip">Monospace</span><span class="chip">适合数字/状态</span></div>
+        <p class="sample-title">DATA HUD</p>
+        <p class="sample-body">更像终端和控制台。建议只用于数字、标签、状态，不建议全站中文都用它。</p>
+        <div class="numbers"><div class="number"><b>CPU 02</b><span>server</span></div><div class="number"><b>8080</b><span>port</span></div><div class="number"><b>200</b><span>status</span></div></div>
+      </article>
+
+      <article class="card d">
+        <h2>方案 D：窄体未来感</h2>
+        <div class="meta"><span class="chip">Arial Narrow</span><span class="chip">DengXian</span><span class="chip">适合标题</span></div>
+        <p class="sample-title">FUTURE GUILD</p>
+        <p class="sample-body">标题更瘦更锋利，有未来设备屏幕味。正文还是要搭配清爽中文字体。</p>
+        <div class="numbers"><div class="number"><b>2026</b><span>season</span></div><div class="number"><b>3D</b><span>visual</span></div><div class="number"><b>NEON</b><span>style</span></div></div>
+      </article>
+
+      <article class="card e">
+        <h2>方案 E：硬朗黑体</h2>
+        <div class="meta"><span class="chip">SimHei</span><span class="chip">Bahnschrift</span><span class="chip">慎用</span></div>
+        <p class="sample-title">装备工具</p>
+        <p class="sample-body">冲击力更强，但容易显得老派和粗糙。除非你想要很硬的视觉，否则不推荐。</p>
+        <div class="numbers"><div class="number"><b>76</b><span>方案</span></div><div class="number"><b>34</b><span>词条</span></div><div class="number"><b>9.6</b><span>评分</span></div></div>
+      </article>
+    </section>
+
+    <p class="hint">如果你想要更像小米/华为/阿里那种高级感，我下一步会把 MiSans、HarmonyOS Sans 或阿里普惠体下载到项目本地，用 @font-face 引入，不走 Google Fonts。</p>
+  </main>
+</body>
+</html>

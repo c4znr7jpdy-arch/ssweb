@@ -1,29 +1,30 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>管理后台 - 盛世</title>
-  <link rel="stylesheet" href="/css/style.css">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="stylesheet" href="/css/style.css?v=202607106">
   <style>
     .admin-container { max-width: 1000px; margin: 0 auto; padding: 100px 20px 40px; }
 
     .login-box {
       max-width: 400px; margin: 100px auto;
-      background: var(--panel); border: 1px solid rgba(201,169,110,0.16);
+      background: var(--panel); border: 1px solid rgba(0,229,255,0.16);
       border-radius: 18px; padding: 40px; text-align: center;
     }
     .login-box h2 { margin-bottom: 24px; letter-spacing: 4px; }
     .login-box input {
       width: 100%; padding: 12px 16px; background: var(--bg);
-      border: 1px solid rgba(201,169,110,0.2); border-radius: 8px;
+      border: 1px solid rgba(0,229,255,0.2); border-radius: 8px;
       color: var(--text); font-size: 16px; margin-bottom: 16px;
     }
     .login-box .btn { width: 100%; }
 
     .admin-tabs {
       display: flex; gap: 12px; margin-bottom: 24px;
-      border-bottom: 1px solid rgba(201,169,110,0.1);
+      border-bottom: 1px solid rgba(0,229,255,0.1);
       padding-bottom: 12px;
     }
     .admin-tab {
@@ -47,7 +48,7 @@
       overflow: hidden;
     }
     .admin-table th {
-      background: rgba(201,169,110,0.1);
+      background: rgba(0,229,255,0.1);
       padding: 12px 16px; text-align: left;
       font-size: 12px; color: var(--gold); letter-spacing: 2px;
     }
@@ -55,7 +56,7 @@
       padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.05);
       font-size: 13px;
     }
-    .admin-table tr:hover td { background: rgba(201,169,110,0.03); }
+    .admin-table tr:hover td { background: rgba(0,229,255,0.03); }
 
     .admin-form {
       background: var(--panel); border-radius: 12px;
@@ -71,7 +72,7 @@
     }
     .form-group input, .form-group select, .form-group textarea {
       width: 100%; padding: 10px 12px; background: var(--bg);
-      border: 1px solid rgba(201,169,110,0.2); border-radius: 6px;
+      border: 1px solid rgba(0,229,255,0.2); border-radius: 6px;
       color: var(--text); font-size: 14px;
     }
     .form-group textarea { min-height: 80px; resize: vertical; }
@@ -83,7 +84,12 @@
       padding: 4px 8px; border-radius: 4px;
       transition: all 0.2s;
     }
-    .action-btns button:hover { color: var(--gold); background: rgba(201,169,110,0.1); }
+    .action-btns .action-link {
+      display: inline-flex; align-items: center;
+      color: var(--gold); text-decoration: none; font-size: 12px;
+      padding: 4px 8px; border: 1px solid rgba(200,150,80,.3);
+    }
+    .action-btns button:hover { color: var(--gold); background: rgba(0,229,255,0.1); }
     .action-btns .delete-btn:hover { color: #ff5252; background: rgba(255,82,82,0.1); }
 
     .section-header {
@@ -93,9 +99,45 @@
     .section-header h3 {
       font-size: 18px; letter-spacing: 2px;
     }
+
+    .event-roster-manager {
+      display: none; background: var(--panel); border: 1px solid rgba(200,150,80,.28);
+      border-radius: 12px; padding: 20px; margin-bottom: 20px;
+    }
+    .event-roster-manager .roster-manager-header {
+      display: flex; justify-content: space-between; align-items: center;
+      gap: 12px; margin-bottom: 14px;
+    }
+    .event-roster-manager .roster-manager-header h4 { margin: 0; color: var(--gold); }
+    .roster-add-row { display: flex; gap: 10px; margin-bottom: 14px; }
+    .roster-add-row input {
+      flex: 1; min-width: 0; padding: 10px 12px; background: var(--bg);
+      border: 1px solid rgba(0,229,255,.2); border-radius: 6px; color: var(--text);
+    }
+    .roster-status { min-height: 20px; color: var(--muted); font-size: 12px; margin-bottom: 10px; }
+    .roster-status.success { color: #69d28f; }
+    .roster-status.warning { color: #f0b85a; }
+    .roster-member-list { display: grid; gap: 8px; }
+    .roster-member-item {
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      padding: 10px 12px; border-radius: 8px; background: rgba(255,255,255,.035);
+    }
+    .roster-member-item .delete-btn {
+      border: 0; background: transparent; color: #ff7b7b; cursor: pointer;
+      padding: 6px 10px; border-radius: 6px;
+    }
+    .roster-member-item .delete-btn:hover { background: rgba(255,82,82,.1); }
+    .roster-member-meta { color: var(--muted); font-size: 12px; margin-left: 8px; }
+    .roster-empty { color: var(--muted); text-align: center; padding: 18px; }
+
+    @media (max-width: 640px) {
+      .roster-add-row { flex-direction: column; }
+      .event-roster-manager .roster-manager-header { align-items: flex-start; }
+    }
   </style>
+  <link rel="stylesheet" href="/css/theme.css?v=2026071102">
 </head>
-<body>
+<body class="admin-page">
   <nav class="nav">
     <a href="/" class="nav-logo">盛世</a>
     <div class="nav-links">
@@ -105,6 +147,7 @@
 
   <div class="login-box" id="loginBox">
     <h2>管理后台</h2>
+    <input type="text" id="usernameInput" value="admin" autocomplete="username" placeholder="管理员账号">
     <input type="password" id="passwordInput" placeholder="请输入管理密码" onkeypress="if(event.key==='Enter')login()">
     <button class="btn btn-primary" onclick="login()">登录</button>
   </div>
@@ -134,6 +177,7 @@
         <button class="btn btn-primary" onclick="showEventForm()">+ 添加活动</button>
       </div>
       <div id="eventForm" style="display:none"></div>
+      <div id="eventRosterManager" class="event-roster-manager"></div>
       <table class="admin-table">
         <thead><tr><th>日期</th><th>标题</th><th>类型</th><th>状态</th><th>操作</th></tr></thead>
         <tbody id="eventTableBody"></tbody>
@@ -153,6 +197,6 @@
     </div>
   </div>
 
-  <script src="/js/admin.js"></script>
+  <script src="/js/admin.js?v=202607212"></script>
 </body>
 </html>

@@ -1,26 +1,198 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="盛世百业成员、活动日历、贡献榜与实用工具。">
+  <meta property="og:title" content="盛世">
+  <meta property="og:description" content="以盛世之名，聚同袍之义。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://ss.xiuxianjyj.xin/">
+  <link rel="canonical" href="https://ss.xiuxianjyj.xin/">
   <title>盛世</title>
-  <link rel="stylesheet" href="/css/style.css">
-  <link rel="preload" href="/images/home-banner.jpg" as="image">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="stylesheet" href="/css/style.css?v=202607106">
   <style>
-    html { scroll-behavior: smooth; }
+    :root {
+      --bg: #090b09;
+      --gold: #c89650;
+      --gold-soft: rgba(200,150,80,.24);
+      --jade: #7e9d95;
+      --paper: #e8e1d3;
+      --muted: rgba(232,225,211,.5);
+    }
+    html { scroll-behavior: smooth; overflow: hidden; }
     body { background: var(--bg); overflow: hidden; }
+
+    body::before {
+      z-index: 0;
+      opacity: .2;
+      background-image:
+        linear-gradient(rgba(200,150,80,.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(200,150,80,.045) 1px, transparent 1px);
+      background-size: 64px 64px;
+      mask-image: linear-gradient(90deg, #000, transparent 64%);
+    }
+
+    .cinematic-intro {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      color: var(--paper);
+      background: #070907;
+      pointer-events: none;
+      animation: intro-exit .8s cubic-bezier(.7,0,.2,1) 1.65s forwards;
+    }
+    .cinematic-intro::before,
+    .cinematic-intro::after {
+      content: "";
+      position: absolute;
+      inset: -12%;
+      background:
+        radial-gradient(ellipse at 50% 50%, rgba(200,150,80,.08), transparent 28%),
+        repeating-radial-gradient(ellipse at 50% 50%, rgba(232,225,211,.028) 0 1px, transparent 2px 8px);
+      transform: scale(1.3) rotate(-4deg);
+      animation: ink-breathe 2.4s ease-out both;
+    }
+    .cinematic-intro::after {
+      background: linear-gradient(90deg, #070907 0 34%, transparent 47% 53%, #070907 66% 100%);
+      animation: curtain-open 1.35s cubic-bezier(.72,0,.2,1) .55s forwards;
+    }
+    .intro-content { position: relative; z-index: 2; text-align: center; }
+    .intro-kicker {
+      margin-bottom: 14px;
+      color: var(--gold);
+      font-size: 10px;
+      letter-spacing: 12px;
+      opacity: 0;
+      animation: intro-copy .7s ease .18s forwards;
+    }
+    .intro-mark {
+      font: 400 clamp(74px, 12vw, 148px)/1 var(--font-display);
+      letter-spacing: 24px;
+      text-indent: 24px;
+      clip-path: inset(0 100% 0 0);
+      filter: blur(8px);
+      animation: title-ink .95s cubic-bezier(.2,.8,.2,1) .28s forwards;
+    }
+    .intro-line {
+      width: 0;
+      height: 1px;
+      margin: 22px auto 0;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      animation: line-draw .8s ease .65s forwards;
+    }
+    .cinematic-intro.is-skipped { display: none; }
+
+    .ambient-layer {
+      position: fixed;
+      inset: 0;
+      z-index: 3;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    .mist {
+      position: absolute;
+      width: 62vw;
+      height: 28vh;
+      border-radius: 50%;
+      filter: blur(58px);
+      opacity: .16;
+      background: rgba(126,157,149,.22);
+      animation: mist-drift 16s ease-in-out infinite alternate;
+    }
+    .mist-a { left: 18vw; top: 8vh; }
+    .mist-b { right: -18vw; bottom: 4vh; animation-delay: -8s; animation-duration: 21s; }
+    .dust {
+      position: absolute;
+      left: var(--x);
+      bottom: -12px;
+      width: var(--size);
+      height: var(--size);
+      border-radius: 50%;
+      background: var(--gold);
+      box-shadow: 0 0 10px rgba(200,150,80,.6);
+      opacity: 0;
+      animation: dust-rise var(--duration) linear var(--delay) infinite;
+    }
+
+    .hud-frame { position: fixed; inset: 84px 30px 26px; z-index: 5; pointer-events: none; opacity: 0; }
+    body.is-ready .hud-frame { animation: hud-appear .8s ease 1s forwards; }
+    .hud-corner { position: absolute; width: 42px; height: 42px; }
+    .hud-corner::before,
+    .hud-corner::after { content: ""; position: absolute; background: rgba(200,150,80,.38); }
+    .hud-corner::before { width: 42px; height: 1px; }
+    .hud-corner::after { width: 1px; height: 42px; }
+    .hud-corner.tl { left: 0; top: 0; }
+    .hud-corner.tr { right: 0; top: 0; transform: scaleX(-1); }
+    .hud-corner.bl { left: 0; bottom: 0; transform: scaleY(-1); }
+    .hud-corner.br { right: 0; bottom: 0; transform: scale(-1); }
+
+    .cursor-reticle {
+      position: fixed;
+      left: 0;
+      top: 0;
+      z-index: 200;
+      width: 34px;
+      height: 34px;
+      margin: -17px 0 0 -17px;
+      border: 1px solid rgba(200,150,80,.34);
+      border-radius: 50%;
+      opacity: 0;
+      pointer-events: none;
+      transform: translate3d(var(--cursor-x, -100px), var(--cursor-y, -100px), 0) scale(.72);
+      transition: width .2s ease, height .2s ease, margin .2s ease, border-color .2s ease, opacity .25s ease;
+      will-change: transform;
+    }
+    .cursor-reticle::before,
+    .cursor-reticle::after { content: ""; position: absolute; background: rgba(200,150,80,.5); }
+    .cursor-reticle::before { width: 9px; height: 1px; left: 12px; top: 16px; }
+    .cursor-reticle::after { width: 1px; height: 9px; left: 16px; top: 12px; }
+    body.has-pointer .cursor-reticle { opacity: 1; }
+    body.pointer-over-action .cursor-reticle {
+      width: 54px; height: 54px; margin: -27px 0 0 -27px;
+      border-color: rgba(200,150,80,.7);
+    }
+
+    .transition-slash {
+      position: fixed;
+      inset: 0;
+      z-index: 900;
+      pointer-events: none;
+      visibility: hidden;
+      background: #070907;
+      clip-path: polygon(0 48%, 0 52%, 0 52%, 0 48%);
+    }
+    body.is-leaving .transition-slash {
+      visibility: visible;
+      animation: slash-close .52s cubic-bezier(.72,0,.18,1) forwards;
+    }
+    .transition-slash::after {
+      content: "";
+      position: absolute;
+      left: -10%; right: -10%; top: 50%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), #fff, var(--gold), transparent);
+      box-shadow: 0 0 20px rgba(200,150,80,.62);
+    }
 
     .nav {
       position: fixed; top: 0; left: 0; right: 0; z-index: 100;
       display: flex; align-items: center; justify-content: space-between;
       padding: 22px 46px;
-      background: linear-gradient(180deg, rgba(5,5,4,.92) 0%, rgba(5,5,4,.46) 55%, transparent 100%);
-      backdrop-filter: blur(4px);
+      background: linear-gradient(180deg, rgba(7,9,7,.94) 0%, rgba(7,9,7,.48) 58%, transparent 100%);
+      border-bottom: 1px solid rgba(200,150,80,.1);
+      backdrop-filter: blur(14px);
+      opacity: 0; transform: translateY(-18px);
     }
+    body.is-ready .nav { animation: nav-enter .7s ease .4s forwards; }
     .nav-logo {
       display: flex; align-items: center; gap: 14px;
       color: var(--gold); font-size: 23px; font-weight: 700;
-      letter-spacing: 8px; text-shadow: 0 0 28px rgba(201,169,110,.35);
+      letter-spacing: 8px; text-shadow: none;
       text-decoration: none; white-space: nowrap;
     }
     .nav-logo::before {
@@ -31,17 +203,40 @@
     .nav-links a {
       color: rgba(255,255,255,.52); text-decoration: none;
       font-size: 13px; letter-spacing: 3px;
+      white-space: nowrap;
       transition: color .28s ease, text-shadow .28s ease;
     }
     .nav-links a:hover {
-      color: var(--gold); text-shadow: 0 0 18px rgba(201,169,110,.35);
+      color: var(--gold); text-shadow: none;
+    }
+
+    .nav-user {
+      display: flex; align-items: center; gap: 16px;
+      font-size: 13px; letter-spacing: 2px;
+    }
+    .nav-user a {
+      color: rgba(255,255,255,.52); text-decoration: none;
+      transition: color .28s ease;
+    }
+    .nav-user a:hover { color: var(--gold); }
+    .nav-user .username { color: var(--gold); cursor: default; }
+    .nav-user .logout-btn {
+      background: none; border: 1px solid rgba(200,150,80,.3);
+      color: rgba(255,255,255,.52); padding: 5px 14px;
+      font-size: 12px; letter-spacing: 2px; cursor: pointer;
+      transition: color .28s ease, border-color .28s ease;
+    }
+    .nav-user .logout-btn:hover {
+      color: var(--gold); border-color: rgba(200,150,80,.6);
     }
 
     .left-mask {
-      position: fixed; left: 0; top: 0; bottom: 0; width: 34vw;
-      background: var(--bg);
-      clip-path: polygon(0 0, 100% 0, 82% 100%, 0 100%);
-      z-index: 20; pointer-events: none;
+      /*
+        不再用遮罩压住第一张图。
+        第一张图的斜边由 .panel 自己的 skew 产生，
+        否则遮罩会把第一张图盖窄。
+      */
+      display: none;
     }
 
     .hero-title {
@@ -50,122 +245,110 @@
       width: min(350px, 22vw); text-align: left;
       pointer-events: none; background: transparent;
       transition: opacity .45s ease, transform .45s ease;
+      opacity: 0;
     }
+    body.is-ready .hero-title { animation: hero-enter .9s cubic-bezier(.2,.8,.2,1) .62s forwards; }
     .gallery:hover + .hero-title, .hero-title.is-hidden {
       opacity: .18; transform: translateY(-54%) scale(.96);
     }
     .hero-kicker {
       color: var(--gold); font-size: 12px;
       letter-spacing: 8px; margin-bottom: 20px;
-      text-shadow: 0 0 20px rgba(201,169,110,.35);
+      text-shadow: none;
     }
     .hero-title h1 {
-      font-family: 'Noto Serif SC', serif;
+      font-family: var(--font-display);
+      font-weight: 400;
       font-size: clamp(38px, 6.4vw, 82px);
       line-height: 1.08; letter-spacing: 14px; font-weight: 700;
-      text-shadow: 0 8px 34px rgba(0,0,0,.78);
+      color: var(--paper); text-shadow: 0 8px 34px rgba(0,0,0,.78);
     }
     .hero-title p {
-      margin-top: 22px; color: rgba(255,255,255,.62);
+      margin-top: 22px; color: rgba(232,225,211,.62);
       font-size: 14px; letter-spacing: 5px; line-height: 2;
     }
 
     .gallery {
       position: relative; z-index: 1;
       width: 70vw; height: 100vh;
-      margin-left: 30vw; display: flex; overflow: hidden;
-      background: radial-gradient(circle at 50% 45%, rgba(201,169,110,.09), transparent 35%), var(--bg);
+      margin-left: 30vw;
+
+      display: flex; overflow: visible;
+
+      background: radial-gradient(circle at 50% 45%, rgba(126,157,149,.08), transparent 35%), var(--bg);
+      transform: translate3d(var(--gallery-x, 0), var(--gallery-y, 0), 0) scale(1.012);
+      transition: transform .18s ease-out;
     }
 
     .panel {
       position: relative; height: 100vh; flex: 1; min-width: 0;
       overflow: hidden; transform: skewX(-5.5deg); transform-origin: center;
-      margin-left: -1.22vw; cursor: pointer;
+      margin-left: -1.06vw; cursor: pointer;
       filter: brightness(.74) saturate(.78) contrast(1.04);
-      transition: flex 680ms cubic-bezier(.2,.9,.18,1), filter 680ms cubic-bezier(.2,.9,.18,1);
+      box-shadow:
+        inset 16px 0 22px -22px rgba(232,225,211,.34),
+        inset -16px 0 22px -22px rgba(0,0,0,.72);
+      transition:
+        flex 560ms cubic-bezier(.22,.72,.2,1),
+        filter 560ms cubic-bezier(.22,.72,.2,1),
+        box-shadow 560ms ease;
       will-change: flex, filter; isolation: isolate;
+      opacity: 0;
     }
+    body.banners-ready .panel { animation: panel-enter .9s cubic-bezier(.18,.82,.18,1) forwards; }
+    body.banners-ready .panel:nth-child(1) { animation-delay: .08s; }
+    body.banners-ready .panel:nth-child(2) { animation-delay: .18s; }
+    body.banners-ready .panel:nth-child(3) { animation-delay: .28s; }
+    body.banners-ready .panel:nth-child(4) { animation-delay: .38s; }
+    body.banners-ready .panel:nth-child(5) { animation-delay: .48s; }
     .panel:first-child { margin-left: 0; }
 
     .panel::before {
       content: ""; position: absolute; inset: 0 -5vw;
       background: linear-gradient(180deg, rgba(0,0,0,.05), rgba(0,0,0,.58)), var(--img);
-      /* 关键修复：允许每张图单独控制显示范围，避免横图被默认居中裁切得太狠 */
       background-size: var(--bg-size, cover);
-      background-position: var(--bg-pos, center center);
+      background-position: var(--bg-pos, center);
       background-repeat: no-repeat;
-      transform: skewX(5.5deg) scale(var(--bg-scale, 1.06)); transform-origin: center;
+      transform: skewX(5.5deg) scale(var(--bg-scale, 1.08)) translate3d(var(--scene-x, 0), var(--scene-y, 0), 0); transform-origin: center;
       transition:
-        transform 680ms cubic-bezier(.2,.9,.18,1),
-        background-position 680ms cubic-bezier(.2,.9,.18,1),
-        background-size 680ms cubic-bezier(.2,.9,.18,1);
-      will-change: transform, background-position, background-size; z-index: -2;
+        transform 560ms cubic-bezier(.22,.72,.2,1),
+        background-position 560ms cubic-bezier(.22,.72,.2,1),
+        background-size 560ms cubic-bezier(.22,.72,.2,1);
+      will-change: transform; z-index: -2;
     }
     .panel::after {
       content: ""; position: absolute; inset: 0; z-index: -1;
       background:
         linear-gradient(90deg, rgba(0,0,0,.68), transparent 22%, transparent 78%, rgba(0,0,0,.45)),
         linear-gradient(180deg, rgba(0,0,0,.18), transparent 30%, rgba(0,0,0,.34));
-      opacity: .82; transition: opacity 680ms cubic-bezier(.2,.9,.18,1);
+      opacity: .82; transition: opacity 560ms cubic-bezier(.22,.72,.2,1);
       pointer-events: none;
     }
     .panel-border {
-      position: absolute; inset: 0 auto 0 0; width: 1px;
-      background: linear-gradient(180deg, transparent, rgba(201,169,110,.42), transparent);
-      opacity: .72; z-index: 4; pointer-events: none;
+      position: absolute; inset: 0 auto 0 -9px; width: 18px;
+      background:
+        linear-gradient(90deg, transparent, rgba(200,150,80,.11) 42%, rgba(232,225,211,.28) 50%, rgba(200,150,80,.08) 58%, transparent),
+        linear-gradient(180deg, transparent 3%, rgba(200,150,80,.28) 22%, rgba(232,225,211,.32) 50%, rgba(200,150,80,.22) 78%, transparent 97%);
+      filter: blur(.45px);
+      opacity: .58; z-index: 4; pointer-events: none;
+      transition: opacity 560ms ease;
     }
 
     .gallery:hover .panel {
-      flex: .85; filter: brightness(.5) saturate(.6) contrast(1);
+      flex: .96; filter: brightness(.62) saturate(.7) contrast(1.02);
     }
     .gallery .panel:hover {
-      flex: 2.8; filter: brightness(1.04) saturate(1.12) contrast(1.06); z-index: 8;
+      flex: 1.35; filter: brightness(.98) saturate(1.04) contrast(1.04); z-index: 8;
+      box-shadow:
+        inset 18px 0 25px -22px rgba(232,225,211,.42),
+        inset -18px 0 25px -22px rgba(0,0,0,.68);
     }
     .gallery .panel:hover::before, .gallery .panel.active::before {
-      background-position: var(--hover-pos, var(--bg-pos, center center));
-      transform: skewX(5.5deg) scale(var(--hover-scale, 1.10));
+      background-position: var(--hover-pos, var(--bg-pos, center));
+      transform: skewX(5.5deg) scale(var(--hover-scale, 1.10)) translate3d(var(--scene-x, 0), var(--scene-y, 0), 0);
     }
-    .gallery .panel:hover::after, .gallery .panel.active::after { opacity: .24; }
-
-    /*
-      每张图的单独裁切参数：
-      --bg-pos: 控制默认焦点位置，横图人物偏右就用 60%~75% center
-      --hover-pos: 控制展开后的焦点位置
-      --bg-scale / --hover-scale: 数值越小，显示内容越多；数值越大，视觉冲击越强但裁切越多
-      如果某张图必须完整显示，可以临时改成：--bg-size: contain; --bg-scale: 1;
-    */
-    .panel:nth-child(1) {
-      --bg-pos: 52% center;
-      --hover-pos: 50% center;
-      --bg-scale: 1.04;
-      --hover-scale: 1.08;
-    }
-    .panel:nth-child(2) {
-      /* 你发的白发横图人物偏右，先用这个参数 */
-      --bg-pos: 68% center;
-      --hover-pos: 66% center;
-      --bg-scale: 1.02;
-      --hover-scale: 1.04;
-    }
-    .panel:nth-child(3) {
-      --bg-pos: 58% center;
-      --hover-pos: 56% center;
-      --bg-scale: 1.04;
-      --hover-scale: 1.08;
-    }
-    .panel:nth-child(4) {
-      --bg-pos: 50% center;
-      --hover-pos: 50% center;
-      --bg-scale: 1.06;
-      --hover-scale: 1.10;
-    }
-    .panel:nth-child(5) {
-      --bg-pos: 45% center;
-      --hover-pos: 45% center;
-      --bg-scale: 1.06;
-      --hover-scale: 1.10;
-    }
-
+    .gallery .panel:hover::after, .gallery .panel.active::after { opacity: .34; }
+    .gallery .panel:hover .panel-border, .gallery .panel.active .panel-border { opacity: .78; }
 
     .panel-mini {
       position: absolute; left: 50%; bottom: 66px; z-index: 10;
@@ -192,7 +375,7 @@
       transition: color .36s ease, opacity .36s ease;
     }
     .panel:hover .panel-index, .panel.active .panel-index {
-      color: rgba(201,169,110,.75); opacity: 1;
+      color: rgba(200,150,80,.82); opacity: 1;
     }
 
     .panel-tag, .panel-title, .panel-desc, .panel-line, .panel-action {
@@ -220,10 +403,10 @@
     }
     .panel-action {
       width: fit-content; margin-top: 24px; padding: 9px 18px;
-      border: 1px solid rgba(201,169,110,.5);
+      border: 1px solid rgba(200,150,80,.5);
       color: rgba(255,255,255,.76); font-size: 12px; letter-spacing: 3px;
       background: rgba(0,0,0,.22);
-      box-shadow: inset 0 0 22px rgba(201,169,110,.06);
+      box-shadow: inset 0 0 22px rgba(200,150,80,.06);
       transition-delay: 270ms;
     }
 
@@ -237,6 +420,26 @@
       opacity: 1; transform: scaleX(1);
     }
 
+    .panel:nth-child(1) {
+      --bg-pos: center center;
+      --hover-pos: center center;
+      --bg-scale: 1.06;
+      --hover-scale: 1.085;
+    }
+
+    .panel:nth-child(2) {
+      --bg-pos: 90% 10%;
+      --hover-pos: 90% 10%;
+      --bg-scale: 1.06;
+      --hover-scale: 1.075;
+    }
+
+    .panel:nth-child(3) {
+      --bg-pos: center center;
+      --hover-pos: center center;
+    }
+
+
     .footer-hint {
       position: fixed; bottom: 28px; left: 50%; z-index: 100;
       transform: translateX(-50%);
@@ -244,14 +447,48 @@
       animation: pulse 2s ease-in-out infinite; pointer-events: none;
     }
     @keyframes pulse { 0%,100% { opacity: .25; } 50% { opacity: .58; } }
+    @keyframes intro-copy { to { opacity: 1; } }
+    @keyframes title-ink { to { clip-path: inset(0 0 0 0); filter: blur(0); } }
+    @keyframes line-draw { to { width: 240px; } }
+    @keyframes ink-breathe { from { opacity: 0; transform: scale(1.55) rotate(-8deg); } to { opacity: 1; transform: scale(1.08) rotate(0); } }
+    @keyframes curtain-open { to { transform: scaleX(2.2); opacity: 0; } }
+    @keyframes intro-exit { to { opacity: 0; visibility: hidden; filter: blur(10px); } }
+    @keyframes nav-enter { to { opacity: 1; transform: translateY(0); } }
+    @keyframes hero-enter { from { opacity: 0; transform: translateY(-42%) translateX(-28px); filter: blur(8px); } to { opacity: 1; transform: translateY(-50%) translateX(0); filter: blur(0); } }
+    @keyframes panel-enter { from { opacity: 0; transform: skewX(-5.5deg) translateX(70px); } to { opacity: 1; transform: skewX(-5.5deg) translateX(0); } }
+    @keyframes hud-appear { to { opacity: 1; } }
+    @keyframes mist-drift { to { transform: translate3d(9vw, 4vh, 0) scale(1.15); opacity: .25; } }
+    @keyframes dust-rise { 0% { opacity: 0; transform: translate3d(0,0,0); } 18% { opacity: .48; } 75% { opacity: .22; } 100% { opacity: 0; transform: translate3d(var(--drift), -108vh, 0); } }
+    @keyframes slash-close { 0% { clip-path: polygon(0 49.6%, 0 50.4%, 0 50.4%, 0 49.6%); } 55% { clip-path: polygon(0 42%, 0 58%, 100% 53%, 100% 47%); } 100% { clip-path: polygon(0 0, 0 100%, 100% 100%, 100% 0); } }
+
+    body.entrance-done .hero-title {
+      animation: none;
+      opacity: 1;
+      transform: translateY(-50%);
+    }
+    body.entrance-done .gallery:hover + .hero-title,
+    body.entrance-done .hero-title.is-hidden {
+      opacity: .18;
+      transform: translateY(-54%) scale(.96);
+    }
 
     @media (max-width: 768px) {
       .nav { padding: 16px 20px; }
       .nav-logo { font-size: 18px; letter-spacing: 5px; }
       .nav-logo::before { width: 20px; }
-      .nav-links { display: none; }
+      .nav-links {
+        display: flex;
+        position: fixed;
+        left: 20px;
+        right: 20px;
+        top: 62px;
+        gap: 18px;
+        overflow-x: auto;
+        scrollbar-width: none;
+      }
+      .nav-links::-webkit-scrollbar { display: none; }
       .hero-title { left: 5vw; width: 90vw; }
-      .gallery { width: 100vw; margin-left: 0; }
+      .gallery { width: 100vw; margin-left: 0; overflow: hidden; }
       .panel { margin-left: -3.2vw; }
       .gallery:hover .panel { flex: 1; filter: brightness(.74) saturate(.78) contrast(1.04); }
       .gallery.has-active .panel { flex: .72; filter: brightness(.34) saturate(.42) contrast(1); }
@@ -262,24 +499,52 @@
       .panel-title { font-size: 25px; }
       .panel-desc { font-size: 12px; max-width: 250px; }
       .footer-hint { bottom: 18px; font-size: 11px; letter-spacing: 3px; }
+      .cursor-reticle, .hud-frame { display: none; }
+      .mist { width: 100vw; }
     }
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { transition: none !important; animation: none !important; }
+      .cinematic-intro { display: none; }
+      .nav, .hero-title, .panel, .hud-frame { opacity: 1 !important; transform: none; }
+      .panel { transform: skewX(-5.5deg); }
+      .ambient-layer, .cursor-reticle { display: none; }
     }
   </style>
+  <link rel="stylesheet" href="/css/site-nav.css?v=202607211">
 </head>
 <body>
+  <div class="cinematic-intro" id="cinematicIntro" aria-hidden="true">
+    <div class="intro-content">
+      <div class="intro-kicker">WHERE HEROES GATHER</div>
+      <div class="intro-mark">盛世</div>
+      <div class="intro-line"></div>
+    </div>
+  </div>
+
+  <div class="ambient-layer" id="ambientLayer" aria-hidden="true">
+    <span class="mist mist-a"></span>
+    <span class="mist mist-b"></span>
+  </div>
+
+  <div class="hud-frame" aria-hidden="true">
+    <i class="hud-corner tl"></i><i class="hud-corner tr"></i>
+    <i class="hud-corner bl"></i><i class="hud-corner br"></i>
+  </div>
+  <div class="cursor-reticle" id="cursorReticle" aria-hidden="true"></div>
+  <div class="transition-slash" aria-hidden="true"></div>
+
   <div class="left-mask"></div>
 
   <nav class="nav">
     <a href="/" class="nav-logo">盛世</a>
     <div class="nav-links">
-      <a href="/" class="active" onclick="event.preventDefault();alert('姜玉杰还没做完')">主页</a>
-      <a href="/members.html" onclick="event.preventDefault();alert('姜玉杰还没做完')">成员</a>
-      <a href="/calendar.html" onclick="event.preventDefault();alert('姜玉杰还没做完')">活动日历</a>
-      <a href="/rank.html" onclick="event.preventDefault();alert('姜玉杰还没做完')">贡献榜</a>
-      <a href="/tools/yysls/" onclick="event.preventDefault();alert('姜玉杰还没做完')">装备工具</a>
+      <a href="/" class="active">主页</a>
+      <a href="/members.html">成员</a>
+      <a href="/calendar.html">活动日历</a>
+      <a href="/rank.html">贡献榜</a>
+      <a href="/tools/yysls/" target="_blank">装备工具</a>
     </div>
+    <div class="nav-user" id="userBox"></div>
   </nav>
 
   <main class="gallery" id="gallery"></main>
@@ -292,6 +557,7 @@
 
   <div class="footer-hint">HOVER / TAP TO EXPLORE</div>
 
-  <script src="/js/main.js"></script>
+  <script src="/js/site-nav.js?v=202607211"></script>
+  <script src="/js/main.js?v=202607211"></script>
 </body>
 </html>

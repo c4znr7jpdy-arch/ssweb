@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+  <defs>
+    <linearGradient id="bg" x1="32" y1="24" x2="224" y2="232" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#17201d"/>
+      <stop offset="1" stop-color="#050706"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="72" y1="52" x2="184" y2="208" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#f3d28a"/>
+      <stop offset=".5" stop-color="#c38a3a"/>
+      <stop offset="1" stop-color="#7a451a"/>
+    </linearGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="3" result="blur"/>
+      <feOffset dy="3" result="offset"/>
+      <feColorMatrix in="offset" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .65 0"/>
+      <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <rect x="5" y="5" width="246" height="246" rx="48" fill="url(#bg)" stroke="#9b682b" stroke-width="7"/>
+  <path d="M128 30 221 128 128 226 35 128Z" fill="none" stroke="#8a5b27" stroke-width="3" opacity=".44"/>
+  <path d="M118 261Q75 261 75 335Q75 382 103 427Q122 456 148.0 486.5Q174 517 198.0 545.0Q222 573 234 595Q243 619 243 623Q243 640 229.0 652.0Q215 664 194.5 669.0Q174 674 154.5 672.0Q135 670 124 659Q108 643 98.0 623.5Q88 604 75.0 589.5Q62 575 39 575Q36 575 32.5 585.5Q29 596 26.5 609.0Q24 622 24 629Q24 659 40.0 683.0Q56 707 81.5 725.0Q107 743 134.5 752.5Q162 762 185 762Q216 762 248 730Q311 667 311 579Q311 532 287.0 489.5Q263 447 234 423Q205 398 179.0 375.0Q153 352 151 340Q166 351 189.5 357.5Q213 364 231.5 362.5Q250 361 250 348Q250 339 236.5 324.5Q223 310 202.0 295.5Q181 281 158.5 271.0Q136 261 118 261ZM134 34Q110 34 93.5 57.5Q77 81 77 113Q77 147 93.5 169.5Q110 192 134 192Q157 192 173.5 169.5Q190 147 190 113Q190 81 173.5 57.5Q157 34 134 34Z" transform="translate(128 127) scale(0.225275 -0.225275) translate(-167.500000 -398.000000)" fill="url(#gold)" filter="url(#shadow)"/>
+  <rect x="194" y="194" width="35" height="35" rx="3" fill="#8d2d22" stroke="#d07c5d" stroke-width="3"/>
+  <path d="M202 204h19M202 211h19M211.5 201v22" stroke="#f1c49d" stroke-width="2.5" opacity=".9"/>
+</svg>

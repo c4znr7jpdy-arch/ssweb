@@ -5,7 +5,12 @@ const db = require('../db');
 // GET /api/members - Get all active members
 router.get('/', (req, res) => {
   const { role } = req.query;
-  let sql = 'SELECT * FROM members WHERE status = ?';
+  let sql = `
+    SELECT id, nickname, role, avatar, cover, tags, signature,
+      join_date, status, sort_order, created_at
+    FROM members
+    WHERE status = ?
+  `;
   const params = ['active'];
 
   if (role) {
@@ -20,7 +25,12 @@ router.get('/', (req, res) => {
 
 // GET /api/members/:id - Get member detail
 router.get('/:id', (req, res) => {
-  const member = db.prepare('SELECT * FROM members WHERE id = ?').get(req.params.id);
+  const member = db.prepare(`
+    SELECT id, nickname, role, avatar, cover, tags, signature,
+      join_date, status, sort_order, created_at
+    FROM members
+    WHERE id = ?
+  `).get(req.params.id);
   if (!member) return res.status(404).json({ error: '成员不存在' });
   res.json(member);
 });

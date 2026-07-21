@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>个人中心｜盛世</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="stylesheet" href="/css/album.css?v=202607132" />
+  <link rel="stylesheet" href="/css/theme.css?v=2026071102">
+  <link rel="stylesheet" href="/css/site-nav.css?v=202607211">
+</head>
+<body class="me-page">
+  <div class="noise"></div>
+
+  <header class="topbar">
+    <a href="/" class="brand">盛世</a>
+    <nav class="nav">
+      <a href="/">主页</a>
+      <a href="/members.html">成员</a>
+      <a href="/album.html">成员相册</a>
+      <a class="active" href="/me.html">个人中心</a>
+      <span id="userBox"></span>
+    </nav>
+  </header>
+
+  <main class="page">
+    <section class="hero">
+      <div>
+        <div class="kicker">PERSONAL CENTER</div>
+        <h1>个人中心</h1>
+        <p class="sub">上传入口统一放在这里。普通成员只能上传和管理自己的图片。</p>
+      </div>
+
+      <div class="panel hero-card">
+        <strong id="myPhotoCount">0 张</strong>
+        <p>这里显示你的资料、你的相册和上传入口。成员详情页不直接提供上传。</p>
+      </div>
+    </section>
+
+    <section class="me-layout">
+      <aside class="panel me-side">
+        <div class="kicker">MY ACCOUNT</div>
+        <div class="me-name" id="meName">--</div>
+        <div class="me-role" id="meRole">--</div>
+
+        <div class="tab-list">
+          <button class="tab-btn active" data-tab="profile">我的资料</button>
+          <button class="tab-btn" data-tab="upload">上传图片</button>
+          <button class="tab-btn" data-tab="album">我的相册</button>
+        </div>
+      </aside>
+
+      <section class="me-content">
+        <article class="panel me-section active" data-section="profile">
+          <div class="form-title">EDIT PROFILE</div>
+
+          <form id="profileForm">
+            <div class="field">
+              <label for="nickname">昵称</label>
+              <input id="nickname" placeholder="你的成员昵称" />
+            </div>
+
+            <div class="field">
+              <label for="phrase">个人短语</label>
+              <textarea id="phrase" placeholder="写一句你的江湖宣言"></textarea>
+            </div>
+
+            <button class="btn btn-primary" type="submit">保存资料</button>
+            <div class="message" id="profileMessage"></div>
+          </form>
+        </article>
+
+        <article class="panel me-section" data-section="upload">
+          <div class="form-title">UPLOAD MY PHOTO</div>
+
+          <section class="upload-layout">
+            <label class="panel drop-zone" id="dropZone">
+              <input class="file-input" id="imageInput" type="file" accept="image/jpeg,image/png,image/webp" />
+
+              <div class="drop-inner" id="dropInner">
+                <div class="upload-icon"><span>+</span></div>
+                <div class="drop-title">选择图片</div>
+                <p class="drop-desc">点击选择，或拖拽图片到这里。<br>原图不能超过 10M，上传后压缩到 1M 以下。</p>
+              </div>
+
+              <div class="preview" id="preview">
+                <img id="previewImg" alt="图片预览" />
+              </div>
+            </label>
+
+            <aside class="upload-form">
+              <div class="field">
+                <label for="memberId">成员ID</label>
+                <input id="memberId" readonly />
+              </div>
+
+              <div class="field">
+                <label for="nicknameReadonly">成员昵称</label>
+                <input id="nicknameReadonly" readonly />
+              </div>
+
+              <div class="field">
+                <label for="title">图片标题</label>
+                <input id="title" placeholder="例如：雪夜执剑" />
+              </div>
+
+              <div class="field">
+                <label for="category">分类</label>
+                <select id="category">
+                  <option value="个人">个人</option>
+                  <option value="活动">活动</option>
+                  <option value="合照">合照</option>
+                  <option value="风景">风景</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="description">图片说明</label>
+                <textarea id="description" placeholder="写一句这张图的故事"></textarea>
+              </div>
+
+              <div class="size-box">
+                <div class="size-item">
+                  <span>原图大小</span>
+                  <strong id="originSize">--</strong>
+                </div>
+                <div class="size-item">
+                  <span>压缩后</span>
+                  <strong id="compressedSize">等待上传</strong>
+                </div>
+              </div>
+
+              <div class="progress"><i id="progressBar"></i></div>
+
+              <button class="btn btn-primary" id="uploadBtn" type="button">上传到我的相册</button>
+              <p class="notice">普通成员即使修改前端 memberId，后端也会强制保存到自己的成员ID下。</p>
+              <div class="message" id="uploadMessage"></div>
+            </aside>
+          </section>
+        </article>
+
+        <article class="panel me-section" data-section="album">
+          <div class="form-title">MY ALBUM</div>
+          <section class="album-grid" id="myAlbumGrid"></section>
+        </article>
+      </section>
+    </section>
+  </main>
+
+  <script src="/js/site-nav.js?v=202607211"></script>
+  <script src="/js/me.js?v=202607132"></script>
+</body>
+</html>

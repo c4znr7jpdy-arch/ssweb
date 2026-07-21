@@ -1,17 +1,17 @@
 const db = require('./db');
 
 const members = [
-  { nickname: '风起燕云', role: '社主', tags: 'PVP,活动组织', signature: '一入燕云，皆是江湖', sort_order: 1 },
-  { nickname: '听雨', role: '副社', tags: '副本,教学', signature: '听风听雨听江湖', sort_order: 2 },
-  { nickname: '长安故梦', role: '管理', tags: 'PVP,拍照', signature: '长安月下，故梦如烟', sort_order: 3 },
-  { nickname: '云深不知处', role: '核心成员', tags: '副本,攻略', signature: '云深之处，自有天地', sort_order: 4 },
-  { nickname: '半盏清茶', role: '普通成员', tags: '日常,活动', signature: '半盏清茶度流年', sort_order: 5 }
+  { nickname: '姜玉杰', role: '社主', tags: 'PVP,活动组织', signature: '一入燕云，皆是江湖', sort_order: 1 },
+  { nickname: '有歌旧酒丶', role: '副社', tags: '副本,教学', signature: '听风听雨听江湖', sort_order: 2 },
+  { nickname: '祈云也', role: '长老', tags: 'PVP,拍照', signature: '长安月下，故梦如烟', sort_order: 3 },
+  { nickname: '临渊零一', role: '核心成员', tags: '副本,攻略', signature: '云深之处，自有天地', sort_order: 4 },
+  { nickname: '月愿小梨', role: '普通成员', tags: '日常,活动', signature: '半盏清茶度流年', sort_order: 5 }
 ];
 
 const events = [
-  { title: '百业团建：汴京集合拍照', type: '团建', event_date: '2026-07-12', start_time: '20:30', leader: '风起燕云', location: '汴京', description: '穿上最好看的衣服，汴京城门集合' },
-  { title: '副本教学：英雄本', type: '副本', event_date: '2026-07-14', start_time: '20:00', leader: '听雨', location: '副本入口', description: '带新人过英雄本，老成员优先让位置' },
-  { title: 'PVP 3v3 练习赛', type: 'PVP', event_date: '2026-07-16', start_time: '21:00', leader: '长安故梦', description: '提升PVP技术，自由组队' }
+  { title: '百业团建：汴京集合拍照', type: '团建', event_date: '2026-07-12', start_time: '20:30', leader: '姜玉杰', location: '汴京', description: '穿上最好看的衣服，汴京城门集合' },
+  { title: '副本教学：英雄本', type: '副本', event_date: '2026-07-14', start_time: '20:00', leader: '有歌旧酒丶', location: '副本入口', description: '带新人过英雄本，老成员优先让位置' },
+  { title: 'PVP 3v3 练习赛', type: 'PVP', event_date: '2026-07-16', start_time: '21:00', leader: '祈云也', description: '提升PVP技术，自由组队' }
 ];
 
 console.log('插入测试数据...');

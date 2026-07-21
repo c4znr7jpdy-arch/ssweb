@@ -1,0 +1,22 @@
+[Unit]
+Description=Shengshi guild website
+After=network.target
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+WorkingDirectory=/var/www/shengshi
+EnvironmentFile=/etc/shengshi.env
+ExecStart=/usr/bin/node server/index.js
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=30
+KillSignal=SIGTERM
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ReadWritePaths=/var/www/shengshi/data /var/www/shengshi/public/uploads
+
+[Install]
+WantedBy=multi-user.target

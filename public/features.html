@@ -1,10 +1,11 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>游戏功能 - 盛世</title>
-  <link rel="stylesheet" href="/css/style.css">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="stylesheet" href="/css/style.css?v=202607106">
   <style>
     .page-header { text-align: center; padding: 120px 20px 40px; }
     .page-header h1 { font-size: 36px; letter-spacing: 8px; margin-bottom: 12px; }
@@ -17,12 +18,12 @@
     }
 
     .tool-card {
-      background: var(--panel); border: 1px solid rgba(201,169,110,0.16);
+      background: var(--panel); border: 1px solid rgba(0,229,255,0.16);
       border-radius: 18px; padding: 30px; text-align: center;
       transition: all 0.3s; cursor: pointer; text-decoration: none;
     }
     .tool-card:hover {
-      transform: translateY(-4px); border-color: rgba(201,169,110,0.45);
+      transform: translateY(-4px); border-color: rgba(0,229,255,0.45);
       box-shadow: 0 24px 70px rgba(0,0,0,0.55);
     }
     .tool-card .icon { font-size: 48px; margin-bottom: 16px; }
@@ -33,12 +34,14 @@
       opacity: 0.4; cursor: default;
     }
     .tool-card.disabled:hover {
-      transform: none; border-color: rgba(201,169,110,0.16);
+      transform: none; border-color: rgba(0,229,255,0.16);
       box-shadow: none;
     }
   </style>
+  <link rel="stylesheet" href="/css/theme.css?v=2026071102">
+  <link rel="stylesheet" href="/css/site-nav.css?v=202607211">
 </head>
-<body>
+<body class="features-page">
   <nav class="nav">
     <a href="/" class="nav-logo">盛世</a>
     <div class="nav-links">
@@ -57,20 +60,21 @@
 
   <div class="tools-grid">
     <a class="tool-card" href="/tools/yysls/" target="_blank">
-      <div class="icon">⚔️</div>
+      <div class="icon">装</div>
       <h3>装备毕业率管理器</h3>
-      <p>管理装备词条、计算毕业率、对比装备收益、培养建议</p>
+      <p>管理装备词条、计算毕业率、对比装备收益、生成培养建议。</p>
     </a>
     <div class="tool-card disabled">
-      <div class="icon">📖</div>
+      <div class="icon">本</div>
       <h3>副本攻略</h3>
       <p>即将上线...</p>
     </div>
     <div class="tool-card disabled">
-      <div class="icon">🗺️</div>
+      <div class="icon">图</div>
       <h3>地图工具</h3>
       <p>即将上线...</p>
     </div>
   </div>
+  <script src="/js/site-nav.js?v=202607211"></script>
 </body>
 </html>

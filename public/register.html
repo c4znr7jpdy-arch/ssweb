@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>注册｜盛世</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="stylesheet" href="/css/album.css?v=202607132" />
+  <link rel="stylesheet" href="/css/theme.css?v=2026071102">
+</head>
+<body class="auth-page register-page">
+  <div class="noise"></div>
+
+  <header class="topbar">
+    <a href="/" class="brand">盛世</a>
+    <nav class="nav" id="userBox">
+      <a href="/login.html">登录</a>
+    </nav>
+  </header>
+
+  <main class="auth-wrap">
+    <form class="panel auth-card" id="registerForm">
+      <div class="auth-title">CREATE MEMBER ACCOUNT</div>
+      <h1>注册</h1>
+
+      <div class="field">
+        <label for="username">账号</label>
+        <input id="username" autocomplete="username" placeholder="1-16个字符" />
+      </div>
+
+      <div class="field">
+        <label for="nickname">昵称</label>
+        <input id="nickname" placeholder="注册后会进入成员列表" />
+      </div>
+
+      <div class="field">
+        <label for="password">密码</label>
+        <input id="password" type="password" autocomplete="new-password" placeholder="8-128个字符" />
+      </div>
+
+      <div class="field">
+        <label for="inviteCode">邀请码</label>
+        <input id="inviteCode" type="password" autocomplete="off" placeholder="请输入邀请码" />
+      </div>
+
+      <button class="btn btn-primary" type="submit">注册并进入成员列表</button>
+      <div class="message" id="message"></div>
+
+      <p class="auth-link">已有账号？<a href="/login.html">去登录</a></p>
+    </form>
+  </main>
+
+  <script src="/js/auth.js?v=202607133"></script>
+</body>
+</html>

@@ -1,0 +1,128 @@
+.site-nav-toggle {
+  display: none;
+}
+
+body > nav.site-nav > .site-menu {
+  display: contents;
+}
+
+@media (max-width: 900px) {
+  body > nav.site-nav,
+  header.topbar.site-nav {
+    min-height: 64px;
+    padding: 0 18px !important;
+    overflow: visible !important;
+  }
+
+  .site-nav-toggle {
+    position: relative;
+    z-index: 2;
+    display: inline-flex;
+    width: 44px;
+    height: 44px;
+    flex: 0 0 44px;
+    margin-left: auto;
+    padding: 0;
+    border: 1px solid rgba(200, 150, 80, .38);
+    border-radius: 4px;
+    background: rgba(9, 11, 9, .88);
+    color: #e8e1d3;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+  }
+
+  .site-nav-toggle span {
+    width: 18px;
+    height: 1px;
+    background: currentColor;
+    transition: transform .2s ease, opacity .2s ease;
+  }
+
+  .site-nav.is-open .site-nav-toggle span:nth-child(1) {
+    transform: translateY(6px) rotate(45deg);
+  }
+
+  .site-nav.is-open .site-nav-toggle span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .site-nav.is-open .site-nav-toggle span:nth-child(3) {
+    transform: translateY(-6px) rotate(-45deg);
+  }
+
+  body > nav.site-nav > .site-menu,
+  header.topbar.site-nav > .site-menu {
+    position: absolute !important;
+    inset: calc(100% - 1px) 12px auto !important;
+    z-index: 101;
+    display: none !important;
+    width: auto !important;
+    max-width: none !important;
+    max-height: calc(100vh - 76px);
+    padding: 10px !important;
+    border: 1px solid rgba(200, 150, 80, .26) !important;
+    border-radius: 4px !important;
+    background: rgba(9, 11, 9, .98) !important;
+    box-shadow: 0 22px 50px rgba(0, 0, 0, .52) !important;
+    overflow-y: auto !important;
+    backdrop-filter: blur(18px);
+  }
+
+  body > nav.site-nav.is-open > .site-menu,
+  header.topbar.site-nav.is-open > .site-menu {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  body > nav.site-nav .site-menu > .nav-links,
+  header.topbar.site-nav > nav.site-menu {
+    position: static !important;
+    display: grid !important;
+    width: 100% !important;
+    max-width: none !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 4px !important;
+    padding: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+    overflow: visible !important;
+  }
+
+  body > nav.site-nav .site-menu a,
+  body > nav.site-nav .site-menu .nav-user button,
+  header.topbar.site-nav > nav.site-menu a,
+  header.topbar.site-nav > nav.site-menu button {
+    display: flex !important;
+    min-width: 0;
+    min-height: 44px;
+    padding: 10px 12px !important;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid rgba(232, 225, 211, .08) !important;
+    font-size: 14px !important;
+    line-height: 1.4;
+    letter-spacing: 1px !important;
+    text-align: center;
+    white-space: normal !important;
+  }
+
+  body > nav.site-nav .site-menu > .nav-user {
+    display: flex;
+    width: 100%;
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(200, 150, 80, .2);
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-nav-toggle span {
+    transition: none;
+  }
+}

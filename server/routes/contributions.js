@@ -7,11 +7,11 @@ const requireAuth = require('../middleware/auth');
 router.get('/', (req, res) => {
   const { type = 'total' } = req.query;
 
-  let whereClause = '';
+  let contributionFilter = '';
   if (type === 'month') {
-    whereClause = "WHERE strftime('%Y-%m', c.created_at) = strftime('%Y-%m', 'now')";
+    contributionFilter = "AND strftime('%Y-%m', c.created_at) = strftime('%Y-%m', 'now')";
   } else if (type === 'week') {
-    whereClause = "WHERE c.created_at >= date('now', '-7 days')";
+    contributionFilter = "AND c.created_at >= date('now', '-7 days')";
   }
 
   const rank = db.prepare(`
@@ -20,7 +20,7 @@ router.get('/', (req, res) => {
       COALESCE(SUM(c.points), 0) AS total_points,
       (SELECT reason FROM contributions WHERE member_id = m.id ORDER BY created_at DESC LIMIT 1) AS last_reason
     FROM members m
-    LEFT JOIN contributions c ON c.member_id = m.id ${whereClause}
+    LEFT JOIN contributions c ON c.member_id = m.id ${contributionFilter}
     WHERE m.status = 'active'
     GROUP BY m.id
     ORDER BY total_points DESC

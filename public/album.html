@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>成员相册｜盛世</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="stylesheet" href="/css/album.css?v=202607132" />
+  <link rel="stylesheet" href="/css/theme.css?v=2026071102">
+  <link rel="stylesheet" href="/css/site-nav.css?v=202607211">
+</head>
+<body class="album-page">
+  <div class="noise"></div>
+
+  <header class="topbar">
+    <a href="/" class="brand">盛世</a>
+    <nav class="nav">
+      <a href="/">主页</a>
+      <a href="/members.html">成员</a>
+      <a class="active" href="/album.html">成员相册</a>
+      <a href="/me.html">个人中心</a>
+      <span id="userBox"></span>
+    </nav>
+  </header>
+
+  <main class="page">
+    <section class="hero">
+      <div>
+        <div class="kicker">MEMBER PHOTO ARCHIVE</div>
+        <h1>成员相册</h1>
+        <p class="sub">该页面只展示当前成员的图片。只有成员本人或管理员才会看到上传入口。</p>
+      </div>
+
+      <div class="hero-card">
+        <strong id="albumCount">0 张</strong>
+        <p>点击图片进入大图预览。非本人只能查看，不能上传。</p>
+      </div>
+    </section>
+
+    <section class="toolbar">
+      <div class="filters">
+        <button class="filter active" data-category="全部">全部</button>
+        <button class="filter" data-category="个人">个人</button>
+        <button class="filter" data-category="活动">活动</button>
+        <button class="filter" data-category="合照">合照</button>
+        <button class="filter" data-category="风景">风景</button>
+      </div>
+
+      <a class="btn btn-primary" id="ownerUploadBtn" href="/me.html?tab=upload" style="display:none;">上传图片</a>
+    </section>
+
+    <section class="album-grid" id="albumGrid"></section>
+  </main>
+
+  <section class="lightbox" id="lightbox">
+    <button class="close" id="closeLightbox">×</button>
+
+    <div class="lightbox-view">
+      <img class="lightbox-img" id="lightboxImg" alt="大图预览" />
+    </div>
+
+    <aside class="lightbox-side">
+      <div class="kicker" id="lightboxNo">PHOTO</div>
+      <h2 class="lightbox-title" id="lightboxTitle"></h2>
+      <p class="lightbox-meta" id="lightboxMeta"></p>
+    </aside>
+
+    <div class="lightbox-actions">
+      <button id="prevPhoto">‹</button>
+      <button id="nextPhoto">›</button>
+    </div>
+  </section>
+
+  <script src="/js/site-nav.js?v=202607211"></script>
+  <script src="/js/album.js?v=202607132"></script>
+</body>
+</html>

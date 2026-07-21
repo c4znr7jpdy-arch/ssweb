@@ -1,101 +1,463 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>成员详情 - 盛世</title>
-  <link rel="stylesheet" href="/css/style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>成员详情｜盛世</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <style>
-    html, body { height: 100%; overflow: hidden; }
-
-    .back-btn {
-      position: fixed; top: 30px; left: 30px; z-index: 200;
-      color: rgba(255,255,255,0.5); text-decoration: none;
-      font-size: 24px; transition: color 0.3s;
-      display: flex; align-items: center; gap: 8px;
-    }
-    .back-btn:hover { color: var(--gold); }
-    .back-btn span { font-size: 14px; letter-spacing: 2px; }
-
-    .detail-layout {
-      display: flex; height: 100vh; width: 100%;
+    @font-face {
+      font-family: "Ma Shan Zheng";
+      src: url("/fonts/ma-shan-zheng-full.woff2") format("woff2");
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
     }
 
-    .detail-left {
-      width: 60%; height: 100%;
-      display: flex; align-items: center; justify-content: center;
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #090b09;
+      --gold: #c89650;
+      --gold-soft: rgba(200, 150, 80, .28);
+      --jade: #7e9d95;
+      --paper: #e8e1d3;
+      --white-soft: rgba(232,225,211,.66);
+      --glass: rgba(12, 14, 12, .72);
+      --glass-border: rgba(232,225,211,.16);
+      --font-body: "DengXian", "Microsoft YaHei", "PingFang SC", Arial, sans-serif;
+      --font-display: "Ma Shan Zheng", "STKaiti", "KaiTi", "Microsoft YaHei", sans-serif;
+    }
+
+    html, body {
+      width: 100%;
+      min-height: 100%;
+      background: var(--bg);
+      color: #fff;
+      font-family: var(--font-body);
       overflow: hidden;
+    }
+
+    body { background: var(--bg); }
+
+    .page {
       position: relative;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      isolation: isolate;
     }
 
-    .detail-image {
-      max-width: 80%; max-height: 80vh;
-      object-fit: contain;
-      border-radius: 8px;
-      box-shadow: 0 0 80px rgba(201,169,110,0.15);
-      transform: translateX(-120%);
-      transition: transform 1.2s cubic-bezier(.2,.9,.2,1);
-    }
-
-    .detail-image.visible {
-      transform: translateX(0);
-    }
-
-    .detail-right {
-      width: 40%; height: 100%;
-      display: flex; flex-direction: column; justify-content: center;
-      padding: 60px;
-    }
-
-    .typewriter-line {
-      margin-bottom: 24px;
+    .bg {
+      position: absolute;
+      inset: 0;
+      z-index: -4;
+      background-image: var(--member-bg);
+      background-size: cover;
+      background-position: var(--bg-pos, center center);
+      transform: scale(var(--bg-scale, 1.04));
+      filter: var(--bg-filter, grayscale(.62) sepia(.08) brightness(.66) contrast(1.12));
       opacity: 0;
-      transform: translateY(20px);
-      transition: all 0.6s ease;
+      transition: opacity .4s ease;
     }
 
-    .typewriter-line.visible {
-      opacity: 1;
-      transform: translateY(0);
+    .bg.loaded { opacity: 1; }
+    #page.original-background .bg { filter: none; }
+
+    .shade {
+      position: absolute;
+      inset: 0;
+      z-index: -3;
+      background:
+        linear-gradient(90deg, rgba(7,8,7,.92) 0%, rgba(7,8,7,.62) 26%, rgba(7,8,7,.10) 58%, rgba(7,8,7,.56) 100%),
+        linear-gradient(180deg, rgba(7,8,7,.48) 0%, transparent 34%, rgba(7,8,7,.78) 100%);
     }
 
-    .tw-label {
-      font-size: 11px; letter-spacing: 4px; color: var(--gold);
-      text-transform: uppercase; margin-bottom: 6px;
+    .gold-line {
+      position: absolute;
+      left: 7.2vw;
+      top: 11vh;
+      width: 1px;
+      height: 74vh;
+      background: linear-gradient(180deg, transparent, rgba(200,150,80,.72), transparent);
+      opacity: .65;
     }
 
-    .tw-value {
-      font-family: 'Noto Serif SC', serif;
-      font-size: 28px; color: #fff;
+    .back {
+      position: fixed;
+      top: 34px;
+      left: 46px;
+      z-index: 10;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      color: rgba(255,255,255,.62);
+      text-decoration: none;
+      font-size: 13px;
+      letter-spacing: 3px;
+      transition: color .25s ease, transform .25s ease;
+    }
+
+    .back::before {
+      content: "";
+      width: 28px;
+      height: 1px;
+      background: rgba(255,255,255,.52);
+      transition: background .25s ease, width .25s ease;
+    }
+
+    .back:hover { color: var(--gold); transform: translateX(-2px); }
+    .back:hover::before { width: 38px; background: var(--gold); }
+
+    .content {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      height: 100%;
+      display: grid;
+      grid-template-columns: 43vw 1fr;
+      align-items: center;
+      padding: 8vh 6vw 7vh;
+      gap: 4vw;
+    }
+
+    .identity {
+      align-self: end;
+      padding-left: 6vw;
+      padding-bottom: 6vh;
+      max-width: 520px;
+    }
+
+    .kicker {
+      color: var(--gold);
+      font-size: 12px;
+      letter-spacing: 8px;
+      margin-bottom: 20px;
+      text-shadow: none;
+    }
+
+    .member-no {
+      color: rgba(255,255,255,.78);
+      font-size: 18px;
+      letter-spacing: 5px;
+      margin-bottom: 16px;
+    }
+
+    .name {
+      font-family: var(--font-display);
+      font-weight: 400;
+      font-size: clamp(46px, 5.2vw, 76px);
+      line-height: 1.08;
+      letter-spacing: 10px;
+      color: var(--paper);
+      text-shadow: 0 12px 44px rgba(0,0,0,.75);
+      margin-bottom: 24px;
+      white-space: nowrap;
+    }
+
+    .quote {
+      position: relative;
+      color: rgba(255,255,255,.74);
+      font-size: 16px;
       letter-spacing: 4px;
+      line-height: 2;
+      padding-left: 22px;
+      margin-bottom: 34px;
     }
 
-    .tw-value.signature {
-      font-size: 16px; color: rgba(255,255,255,0.6);
-      font-style: italic;
+    .quote::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 12px;
+      width: 1px;
+      height: calc(100% - 20px);
+      background: var(--gold);
+      box-shadow: none;
+    }
+
+    .tags { display: flex; flex-wrap: wrap; gap: 12px; }
+
+    .tag {
+      padding: 8px 14px;
+      border: 1px solid rgba(126,157,149,.42);
+      color: rgba(232,225,211,.78);
+      background: rgba(12,14,12,.54);
+      backdrop-filter: blur(8px);
+      font-size: 12px;
       letter-spacing: 2px;
     }
 
-    @media (max-width: 768px) {
-      .detail-layout { flex-direction: column; }
-      .detail-left { width: 100%; height: 50%; }
-      .detail-right { width: 100%; height: 50%; padding: 30px; }
-      .tw-value { font-size: 22px; }
+    .profile-card {
+      justify-self: end;
+      width: min(500px, 37vw);
+      padding: 0 0 28px;
+      border: 0;
+      border-top: 1px solid rgba(200,150,80,.5);
+      border-bottom: 1px solid rgba(232,225,211,.12);
+      background: linear-gradient(90deg, rgba(13,15,13,.88), rgba(13,15,13,.58));
+      box-shadow: 0 28px 80px rgba(0,0,0,.32);
+      backdrop-filter: blur(14px);
+      clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 0 100%);
+    }
+
+    .card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 48px;
+      padding: 0 22px;
+      margin-bottom: 0;
+      background: linear-gradient(90deg, rgba(126,157,149,.52), rgba(126,157,149,.12));
+      border-left: 2px solid var(--jade);
+    }
+
+    .role {
+      color: var(--paper);
+      font-size: 12px;
+      letter-spacing: 5px;
+    }
+
+    .status {
+      color: rgba(232,225,211,.52);
+      font-size: 12px;
+      letter-spacing: 3px;
+    }
+
+    .field-list {
+      display: grid;
+      gap: 0;
+      margin: 0 22px 24px;
+    }
+
+    .field-list::before {
+      content: "基础资料  /  PROFILE ATTRIBUTES";
+      padding: 22px 0 12px;
+      color: var(--gold);
+      font-size: 11px;
+      letter-spacing: 3px;
+      border-bottom: 1px solid rgba(232,225,211,.12);
+    }
+
+    .field {
+      display: grid;
+      grid-template-columns: 98px 1fr;
+      gap: 18px;
+      align-items: baseline;
+      padding: 15px 4px;
+      border-bottom: 1px solid rgba(232,225,211,.08);
+    }
+
+    .field-label {
+      color: var(--gold);
+      font-size: 12px;
+      letter-spacing: 4px;
+    }
+
+    .field-value {
+      color: rgba(232,225,211,.86);
+      font-size: 15px;
+      letter-spacing: 3px;
+      line-height: 1.8;
+    }
+
+    .actions { display: flex; gap: 14px; margin: 0 22px; }
+
+    .btn {
+      flex: 1;
+      height: 46px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      font-size: 12px;
+      letter-spacing: 4px;
+      transition: transform .25s ease, border-color .25s ease, background .25s ease;
+    }
+
+    .btn-primary {
+      color: #080806;
+      background: var(--gold);
+      border: 1px solid var(--gold);
+    }
+
+    .btn-ghost {
+      color: rgba(255,255,255,.76);
+      background: rgba(0,0,0,.18);
+      border: 1px solid rgba(126,157,149,.46);
+    }
+
+    .btn:hover { transform: translateY(-2px); }
+
+    .bottom-nav {
+      position: fixed;
+      right: 46px;
+      bottom: 34px;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .mini-btn {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      color: rgba(255,255,255,.62);
+      text-decoration: none;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.24);
+      backdrop-filter: blur(10px);
+      transition: color .25s ease, border-color .25s ease, transform .25s ease;
+    }
+
+    .mini-btn:hover {
+      color: var(--gold);
+      border-color: rgba(200,150,80,.56);
+      transform: translateY(-2px);
+    }
+
+    @media (max-width: 900px) {
+      html, body { overflow: auto; }
+      .page { min-height: 100vh; height: auto; overflow: hidden; }
+      .bg { position: fixed; background-position: center top; }
+      .content { min-height: 100vh; display: block; padding: 100px 22px 90px; }
+      .gold-line { display: none; }
+      .identity { padding: 28vh 0 34px; }
+      .name { letter-spacing: 6px; font-size: clamp(40px, 15vw, 62px); white-space: nowrap; }
+      .quote { font-size: 14px; letter-spacing: 3px; }
+      .profile-card { width: 100%; }
+      .field { grid-template-columns: 86px 1fr; }
+      .back { left: 22px; top: 24px; }
+      .bottom-nav { right: 22px; bottom: 22px; }
     }
   </style>
+  <link rel="stylesheet" href="/css/theme.css?v=2026071301">
 </head>
-<body>
-  <a href="/" class="back-btn">
-    ← <span>返回</span>
-  </a>
 
-  <div class="detail-layout">
-    <div class="detail-left">
-      <img class="detail-image" id="memberImage" src="" alt="">
-    </div>
-    <div class="detail-right" id="infoPanel"></div>
-  </div>
+<body class="member-page">
+  <main class="page" id="page" style="--member-bg: url('/images/member-blank.svg'); --bg-pos: center center; --bg-scale: 1.04;">
+    <div class="bg"></div>
+    <div class="shade"></div>
+    <div class="gold-line"></div>
 
-  <script src="/js/member.js"></script>
+    <a href="/members.html" class="back" id="backLink">返回</a>
+
+    <section class="content">
+      <div class="identity" id="identity"></div>
+      <aside class="profile-card" id="profileCard"></aside>
+    </section>
+
+    <nav class="bottom-nav" id="bottomNav"></nav>
+  </main>
+
+  <script>
+    const params = new URLSearchParams(location.search);
+    const id = params.get('id') || params.get('memberId');
+    if (!id) { location.href = '/members.html'; }
+
+    const backLink = document.getElementById('backLink');
+    const source = params.get('from');
+    if (source === 'home') {
+      backLink.href = '/';
+    } else if (source === 'members') {
+      backLink.href = '/members.html';
+    } else {
+      try {
+        const referrer = new URL(document.referrer);
+        backLink.href = referrer.origin === location.origin && referrer.pathname === '/' ? '/' : '/members.html';
+      } catch {
+        backLink.href = '/members.html';
+      }
+    }
+
+    const page = document.getElementById('page');
+    const identity = document.getElementById('identity');
+    const profileCard = document.getElementById('profileCard');
+    const bottomNav = document.getElementById('bottomNav');
+
+    const bgMap = {
+      1: { url: '/images/home-banner.webp', pos: 'center center' },
+      2: { url: '/images/wechat-bg.webp', pos: 'center center' },
+      3: { url: '/images/banner3.webp', pos: 'center center', filter: 'none', scale: '1', original: true },
+      4: { url: '/images/banner4.webp', pos: 'center center' },
+      5: { url: '/images/geren.webp', pos: 'center center' }
+    };
+
+    function esc(value) {
+      return String(value ?? '').replace(/[&<>"']/g, char => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+      }[char]));
+    }
+
+    function safeUrl(value, fallback) {
+      const url = String(value || '').trim();
+      if (url.startsWith('/') || /^https?:\/\//i.test(url)) return url.replace(/'/g, '%27');
+      return fallback;
+    }
+
+    async function load() {
+      try {
+        const res = await fetch(`/api/members/${id}`);
+        if (!res.ok) throw new Error('成员不存在');
+        const data = await res.json();
+        const m = data.item || data;
+
+        const bg = bgMap[m.id] || { url: m.cover || '/images/member-blank.svg', pos: 'center center' };
+        page.style.setProperty('--member-bg', `url('${safeUrl(bg.url, '/images/member-blank.svg')}')`);
+        page.style.setProperty('--bg-pos', bg.pos);
+        page.style.setProperty('--bg-filter', bg.filter || 'grayscale(.62) sepia(.08) brightness(.66) contrast(1.12)');
+        page.style.setProperty('--bg-scale', bg.scale || '1.04');
+        page.classList.toggle('original-background', bg.original === true);
+        document.querySelector('.bg').classList.add('loaded');
+
+        const tags = (m.tags || '').split(',').filter(Boolean).map(t => `<span class="tag">${esc(t.trim())}</span>`).join('');
+
+        identity.innerHTML = `
+          <div class="kicker">SHENGSHI MEMBER</div>
+          <div class="member-no">#${String(m.id).padStart(3, '0')}</div>
+          <h1 class="name">${esc(m.nickname)}</h1>
+          <p class="quote">${esc(m.signature || m.phrase || '')}</p>
+          <div class="tags">${tags}</div>
+        `;
+
+        profileCard.innerHTML = `
+          <div class="card-top">
+            <div class="role">${esc(m.role || m.roleTitle || '成员')}</div>
+            <div class="status">档案开放</div>
+          </div>
+          <div class="field-list">
+            <div class="field">
+              <div class="field-label">昵称</div>
+              <div class="field-value">${esc(m.nickname)}</div>
+            </div>
+            <div class="field">
+              <div class="field-label">职位</div>
+              <div class="field-value">${esc(m.role || m.roleTitle || '成员')}</div>
+            </div>
+            <div class="field">
+              <div class="field-label">签名</div>
+              <div class="field-value">${esc(m.signature || m.phrase || '这个人很神秘，还没有留下签名')}</div>
+            </div>
+          </div>
+          <div class="actions">
+            <a class="btn btn-primary" id="albumBtn" href="/album.html?memberId=${encodeURIComponent(m.id)}">成员相册</a>
+          </div>
+        `;
+
+        bottomNav.replaceChildren();
+
+      } catch (e) {
+        identity.innerHTML = '<p style="color:rgba(255,255,255,.5)">成员不存在</p>';
+      }
+    }
+
+    load();
+  </script>
 </body>
 </html>

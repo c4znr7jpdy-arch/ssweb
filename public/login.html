@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>登录｜盛世</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="stylesheet" href="/css/album.css?v=202607132" />
+  <link rel="stylesheet" href="/css/theme.css?v=2026071102">
+</head>
+<body class="auth-page login-page">
+  <div class="noise"></div>
+
+  <header class="topbar">
+    <a href="/" class="brand">盛世</a>
+    <nav class="nav" id="userBox">
+      <a href="/register.html">注册</a>
+    </nav>
+  </header>
+
+  <main class="auth-wrap">
+    <form class="panel auth-card" id="loginForm">
+      <div class="auth-title">MEMBER LOGIN</div>
+      <h1>登录</h1>
+
+      <div class="field">
+        <label for="username">账号</label>
+        <input id="username" autocomplete="username" placeholder="请输入账号" />
+      </div>
+
+      <div class="field">
+        <label for="password">密码</label>
+        <input id="password" type="password" autocomplete="current-password" placeholder="请输入密码" />
+      </div>
+
+      <button class="btn btn-primary" type="submit">登录</button>
+      <div class="message" id="message"></div>
+
+      <p class="auth-link">没有账号？<a href="/register.html">去注册</a></p>
+    </form>
+  </main>
+
+  <div class="password-modal" id="passwordModal" hidden>
+    <form class="panel password-modal-card" id="passwordChangeForm">
+      <div class="auth-title">SECURITY UPDATE</div>
+      <h2>首次登录，请设置新密码</h2>
+      <p>新密码设置完成后才能继续使用账号。</p>
+
+      <div class="field">
+        <label for="newPassword">新密码</label>
+        <input id="newPassword" type="password" autocomplete="new-password" placeholder="8-128个字符" />
+      </div>
+
+      <div class="field">
+        <label for="confirmPassword">确认新密码</label>
+        <input id="confirmPassword" type="password" autocomplete="new-password" placeholder="再次输入新密码" />
+      </div>
+
+      <button class="btn btn-primary" type="submit">设置新密码</button>
+      <div class="message" id="passwordMessage"></div>
+    </form>
+  </div>
+
+  <script src="/js/auth.js?v=202607133"></script>
+</body>
+</html>

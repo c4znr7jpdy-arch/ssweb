@@ -1,63 +1,48 @@
 const Database = require('better-sqlite3');
-const path = require('path');
+const bcrypt = require('bcryptjs');
 const fs = require('fs');
+const path = require('path');
+const config = require('./config');
+const { runMigrations } = require('./migrations');
 
-const dataDir = path.join(__dirname, '..', 'data');
-if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true });
+const dataDir = path.dirname(config.databasePath);
+fs.mkdirSync(dataDir, { recursive: true });
 
-const db = new Database(path.join(dataDir, 'guild.db'));
-
+const db = new Database(config.databasePath);
 db.pragma('journal_mode = WAL');
 db.pragma('foreign_keys = ON');
+db.pragma('busy_timeout = 5000');
 
-db.exec(`
-  CREATE TABLE IF NOT EXISTS members (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    nickname TEXT NOT NULL,
-    role TEXT NOT NULL,
-    avatar TEXT,
-    cover TEXT,
-    tags TEXT,
-    signature TEXT,
-    join_date TEXT,
-    status TEXT DEFAULT 'active',
-    sort_order INTEGER DEFAULT 0,
-    created_at TEXT DEFAULT CURRENT_TIMESTAMP
-  );
+const hasExistingSchema = Boolean(
+  db.prepare("SELECT 1 FROM sqlite_master WHERE type = 'table' AND name = 'users'").get()
+);
+const hasMigrationHistory = Boolean(
+  db.prepare("SELECT 1 FROM sqlite_master WHERE type = 'table' AND name = 'schema_migrations'").get()
+);
 
-  CREATE TABLE IF NOT EXISTS events (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    title TEXT NOT NULL,
-    type TEXT NOT NULL,
-    event_date TEXT NOT NULL,
-    start_time TEXT,
-    end_time TEXT,
-    location TEXT,
-    leader TEXT,
-    description TEXT,
-    status TEXT DEFAULT 'upcoming',
-    created_at TEXT DEFAULT CURRENT_TIMESTAMP
-  );
+if (hasExistingSchema && !hasMigrationHistory) {
+  const backupDir = path.join(dataDir, 'backups');
+  fs.mkdirSync(backupDir, { recursive: true });
+  const stamp = new Date().toISOString().replace(/[:.]/g, '-');
+  const backupPath = path.join(backupDir, `guild-before-migrations-${stamp}.db`);
+  const escapedPath = backupPath.replace(/'/g, "''");
+  db.exec(`VACUUM INTO '${escapedPath}'`);
+  console.log(`Database backup created: ${backupPath}`);
+}
 
-  CREATE TABLE IF NOT EXISTS event_members (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    event_id INTEGER NOT NULL,
-    member_id INTEGER NOT NULL,
-    FOREIGN KEY(event_id) REFERENCES events(id),
-    FOREIGN KEY(member_id) REFERENCES members(id)
-  );
+runMigrations(db);
 
-  CREATE TABLE IF NOT EXISTS contributions (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    member_id INTEGER NOT NULL,
-    points INTEGER NOT NULL,
-    type TEXT,
-    reason TEXT,
-    event_id INTEGER,
-    created_at TEXT DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY(member_id) REFERENCES members(id),
-    FOREIGN KEY(event_id) REFERENCES events(id)
-  );
-`);
+const adminExists = db.prepare("SELECT id FROM users WHERE role = 'admin' LIMIT 1").get();
+if (!adminExists && config.initialAdminPassword) {
+  const passwordHash = bcrypt.hashSync(config.initialAdminPassword, 12);
+  db.prepare(`
+    INSERT INTO users (
+      username, password_hash, role, password_change_required, created_at
+    ) VALUES (?, ?, 'admin', 0, ?)
+  `).run(config.initialAdminUsername, passwordHash, new Date().toISOString());
+  console.log(`Initial administrator created: ${config.initialAdminUsername}`);
+} else if (!adminExists) {
+  console.warn('No administrator exists. Set INITIAL_ADMIN_PASSWORD to provision one.');
+}
 
 module.exports = db;

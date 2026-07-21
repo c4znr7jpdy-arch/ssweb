@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#090b09">
+  <title>活动报名｜盛世</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="stylesheet" href="/css/theme.css?v=202607207">
+  <link rel="stylesheet" href="/css/event.css?v=202607208">
+</head>
+<body class="event-page">
+  <div class="event-noise" aria-hidden="true"></div>
+
+  <header class="event-nav">
+    <a class="event-brand" href="/">盛世</a>
+    <a class="back-calendar" href="/calendar.html">返回活动日历</a>
+  </header>
+
+  <main class="event-shell">
+    <section class="page-error panel" id="pageError" hidden>
+      <span>活动状态</span>
+      <h1>无法打开活动</h1>
+      <p id="pageErrorMessage">活动不存在或已经被删除。</p>
+      <a href="/calendar.html">返回活动日历</a>
+    </section>
+
+    <div id="eventContent" hidden>
+      <section class="event-hero panel">
+        <div class="event-badges">
+          <span class="event-status" id="eventStatus">读取中</span>
+        </div>
+
+        <h1 id="eventTitle">活动报名</h1>
+
+        <div class="event-meta-grid">
+          <div class="meta-item">
+            <strong id="eventDateTime">--</strong>
+          </div>
+        </div>
+
+        <div class="capacity-block">
+          <div class="capacity-copy">
+            <span>已报名</span>
+            <strong><b id="joinedCount">0</b><em>/</em><b id="capacityCount">10</b></strong>
+          </div>
+          <div class="capacity-track" aria-hidden="true"><i id="capacityBar"></i></div>
+        </div>
+      </section>
+
+      <div class="event-layout">
+        <section class="roster-panel panel">
+          <div class="section-heading">
+            <h2>报名成员</h2>
+            <strong id="rosterCount">0 人</strong>
+          </div>
+          <div class="member-grid" id="memberGrid"></div>
+        </section>
+
+        <aside class="signup-panel panel">
+          <div class="signup-heading">
+            <h2>立即报名</h2>
+          </div>
+
+          <form id="eventSignupForm">
+            <input id="signupName" name="name" autocomplete="name" aria-label="报名名称" placeholder="输入你的报名名称" maxlength="32" required>
+            <input id="eventId" name="eventId" type="hidden">
+            <button class="signup-button" id="signupButton" type="submit">
+              <span>立即报名</span>
+            </button>
+            <div class="signup-message" id="signupMessage" role="status" aria-live="polite"></div>
+          </form>
+        </aside>
+      </div>
+    </div>
+  </main>
+
+  <script src="/js/event.js?v=202607208"></script>
+</body>
+</html>
